@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { TestComponentComponent } from './data-structures/test-component/test-component.component';
+import { TestComponentComponent } from './models/test-component/test-component.component';
 
 @NgModule({
   declarations: [

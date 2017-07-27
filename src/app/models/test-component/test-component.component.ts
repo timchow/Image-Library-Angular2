@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RgbaPixel } from '../rgba-pixel';
 import { Image } from '../image';
+import { List } from '../list';
 
 @Component({
 	selector: 'app-test-component',
@@ -13,7 +14,53 @@ export class TestComponentComponent implements OnInit {
 	public image: Image;
 
 	constructor() {
-		this.pixel = new RgbaPixel(10,2,2);
+		//this.test_insertFront();
+		//this.test_insertBack();
+		this.test_reverse();
+	}
+
+	test_reverse() {
+		console.log("-- TESING REVERSE METHOD --")
+		let list = new List();
+		let NUM_ELEMENTS = 2;
+		
+		for (var i = 0; i < NUM_ELEMENTS; i++) {
+			list.insertFront(i);
+		}
+
+		console.log("-- BEFORE REVERSE --");
+		list.print();
+
+		list.reverse();
+
+		console.log("-- AFTER REVERSE --");
+		list.print();
+	}
+
+	test_insertFront() {
+		console.log("-- TESING INSERT_FRONT METHOD --")
+		let list = new List();
+		let NUM_ELEMENTS = 10;
+		
+		for (var i = 0; i < NUM_ELEMENTS; i++) {
+			list.insertFront(i);
+		}
+
+		console.log("List size: " + list.size());
+		list.print();
+	}
+
+	test_insertBack() {
+		console.log("-- TESING INSERT_BACK METHOD --")
+		let list = new List();
+		let NUM_ELEMENTS = 10;
+		
+		for (var i = 0; i < NUM_ELEMENTS; i++) {
+			list.insertBack(i);
+		}
+
+		console.log("List size: " + list.size());
+		list.print();
 	}
 
 	ngAfterViewInit() {
@@ -21,6 +68,7 @@ export class TestComponentComponent implements OnInit {
 
 	}
 
+	
 	ngOnInit() {
 
 	}
