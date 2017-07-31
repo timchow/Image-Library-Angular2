@@ -24,7 +24,7 @@ export class List {
     public print(reverse: boolean = false): void {
         let output = "",
             cursor = reverse ? this.tail : this.head;
-        output = reverse ? this._print(cursor,true) : this._print(cursor, false);
+        output = this._print(cursor,reverse);
         console.log(output);
     }
 
@@ -51,10 +51,10 @@ export class List {
         return 1 + this.getSize(head.next);
     }
 
-    private _reverse(head: ListNode): [ListNode,ListNode] {
+    private _reverse(head: ListNode): {"head","tail"} {
         let length = this.getSize(head);
         if (length < 1) { return; }
-        else if (length == 1) { return [head,head]; }
+        else if (length == 1) { return {"head":head,"tail":head}; }
  
         let cursor: ListNode = head, 
             originalhead: ListNode = head, 
@@ -73,15 +73,13 @@ export class List {
         head = cursorShadow;
         tail = originalhead;
 
-        return [head,tail];
+        return {"head":head,"tail":tail};
     }
 
     public reverse() {
-        let temp: [ListNode,ListNode] = this._reverse(this.head);
-        this.head = temp[0];
-        this.tail = temp[1]; 
-        console.log(this.head)
-        console.log(this.tail)
+        let temp: {"head","tail"} = this._reverse(this.head);
+        this.head = temp["head"];
+        this.tail = temp["tail"]; 
     }
 
 
@@ -89,30 +87,29 @@ export class List {
         if (n < 2) { return }
         else if (n >= this.length) { this.reverse(); return }
 
-        let idx = 0;
-        let cursor: ListNode = this.head;
-        let originalhead: ListNode = this.head;
-        let prevTail: ListNode;
-        let newHead: ListNode;
-        let start: ListNode;
-        let end: ListNode;
-        let endPoints: [ListNode,ListNode];
-        let nextStart: ListNode;
-        let ITERATIONS = Math.floor(this.length / n);
+        let idx = 0,
+            j = 0,
+            ITERATIONS = Math.floor(this.length / n);
+        
+        let prevTail: ListNode,
+            newHead: ListNode,
+            start: ListNode,
+            end: ListNode,
+            nextStart: ListNode;
+        
+        let cursor: ListNode = this.head, originalhead: ListNode = this.head;
+        let endPoints: {"head","tail"};
+
         if (this.length % n !=0) {
             ITERATIONS++;
         }
-        let j = 0;
 
-        console.log("Iterations: " + ITERATIONS);
-
-        debugger;
         for(let i = 0; i < ITERATIONS; i++) {
             newHead = cursor;
             newHead.prev = null;
             j = 0;
 
-            if (ITERATIONS-1 == i) { j = (n-1-j); }
+            if (ITERATIONS-1 == i) { n = (this.length % n) || n }
 
             for(; j < n-1; j++) {
                 cursor = cursor.next;
@@ -125,17 +122,14 @@ export class List {
             cursor.next = null;
 
             endPoints = this._reverse(newHead);
-            start = endPoints[0];
-            end = endPoints[1];
+            start = endPoints["head"];
+            end = endPoints["tail"];
 
-            if (i == 0) { prevTail = end; }
+            if (i == 0) { prevTail = end; this.head = start; }
             else { prevTail.next = start; prevTail = end }
-
-            if (i == 0) { this.head = start; }
 
             cursor = nextStart;
         }
-        debugger;
     }
 
     public size(): number {
@@ -174,13 +168,55 @@ export class List {
         this.length++;
     }
 
-
-
     public waterfall(): void {
-
+        let endPoints: {"head","tail"} = this._waterfall(this.head, this.tail);
+        this.head = endPoints["head"];
+        this.tail = endPoints["tail"];
     }
 
-    public getHead(): ListNode {
-        return this.head;
+    private _waterfall(head: ListNode, tail: ListNode): {"head","tail"} {
+        if (this.getSize(head) < 2) return;
+
+        let cursor: ListNode = head, newHead: ListNode = head;
+        let newTail: ListNode, 
+            node: ListNode, 
+            shadowCursor: ListNode,
+            reflectionCursor: ListNode;
+        let currTail: ListNode = tail;
+
+        let skip: boolean = true;
+
+        while (cursor && cursor.next) {
+            
+            if (skip) {
+                cursor = cursor.next;
+                skip = !skip;
+                continue;
+            }
+
+            reflectionCursor = cursor.next;
+
+            if (cursor.prev) {
+                shadowCursor = cursor.prev;
+                shadowCursor.next = reflectionCursor;
+                reflectionCursor.prev = shadowCursor;
+            }
+            
+            // disconnect node
+            node = cursor;
+
+            // reconnection node at back
+            currTail.next = node;
+            node.prev = currTail;
+            currTail = node;
+            currTail.next = null;
+
+            cursor = reflectionCursor;
+            skip = !skip;
+        }
+
+        newTail = currTail;
+
+        return {"head": newHead, "tail": newTail};
     }
 }
