@@ -17,42 +17,74 @@ export class List {
         }
     }
 
-    private copy(): void {
+    public split(splitPoint: number): ListNode {
+        if (splitPoint > this.length || this.length < 0) {
+            throw new Error(splitPoint + " is an invalid splitPoint");
+        }
+        else if (splitPoint == 1) {
 
+            return this.head;
+        }
+
+        let lists = this._split(this.head,splitPoint);
+        this.head = lists["list1"];
+
+        return lists["list2"];
+    }
+
+    private _split(head: ListNode, splitPoint: number): {"list1","list2"} {
+        let head1: ListNode,
+            head2: ListNode;
+
+
+
+        return {"list1":head1,"list2":head2};
+    }
+
+    private copy(): void {
     }
 
     public print(reverse: boolean = false): void {
-        let output = "",
+        let output,
             cursor = reverse ? this.tail : this.head;
-        output = this._print(cursor,reverse);
-        console.log(output);
+        output = this._getList(cursor,reverse);
     }
 
-    private _printList(head: ListNode) {
-        this._print(head);
+    public getList(reverse: boolean = false): Array<any> {
+        let output,
+            cursor = reverse ? this.tail : this.head;
+        return this._getList(cursor,reverse);   
+    }
+
+    private _getList(head: ListNode,reverse: boolean): Array<any> {
+        return this._getListItems(head,reverse);
     }
 
     // Recursive print
-    private _print(cursor: ListNode, reverse: boolean = false): string {
+    private _getListItems(cursor: ListNode, reverse: boolean = false): Array<any> {
         if (cursor == null) {
-            return "";
+            return [];
         }
 
         let node: ListNode = reverse ? cursor.prev : cursor.next;
 
-        return cursor.data + " " + this._print(node,reverse);
+        return [cursor.data].concat(this._getListItems(node,reverse));
     }
 
-    public getSize(head: ListNode): number {
+    public getSize(): number {
+        return this._getSize(this.head);
+    }
+
+    private _getSize(head: ListNode): number {
         if (head == null) {
             return 0;
         }
 
-        return 1 + this.getSize(head.next);
+        return 1 + this._getSize(head.next);
     }
 
     private _reverse(head: ListNode): {"head","tail"} {
-        let length = this.getSize(head);
+        let length = this._getSize(head);
         if (length < 1) { return; }
         else if (length == 1) { return {"head":head,"tail":head}; }
  
@@ -81,7 +113,6 @@ export class List {
         this.head = temp["head"];
         this.tail = temp["tail"]; 
     }
-
 
     public reverseNth(n: number): void {
         if (n < 2) { return }
@@ -175,7 +206,7 @@ export class List {
     }
 
     private _waterfall(head: ListNode, tail: ListNode): {"head","tail"} {
-        if (this.getSize(head) < 2) return;
+        if (this._getSize(head) < 2) return;
 
         let cursor: ListNode = head, newHead: ListNode = head;
         let newTail: ListNode, 
@@ -218,5 +249,11 @@ export class List {
         newTail = currTail;
 
         return {"head": newHead, "tail": newTail};
+    }
+
+    public clear(): void {
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
     }
 }

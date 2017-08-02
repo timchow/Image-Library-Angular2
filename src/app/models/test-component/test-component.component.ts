@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RgbaPixel } from '../rgba-pixel';
 import { Image } from '../image';
-import { List } from '../list';
+import { List } from '../linked-list/list';
 
 @Component({
 	selector: 'app-test-component',
@@ -12,17 +12,63 @@ export class TestComponentComponent implements OnInit {
 
 	public pixel: RgbaPixel;
 	public image: Image;
+	public list: List;
 
 	constructor() {
+		this.list = new List();
 		//this.test_insertFront();
 		//this.test_insertBack();
-		this.test_reverse();
+		//this.test_reverse();
+		//console.log("")
+		
+		//this.test_reverseNth();
+		//this.test_waterfall();
+	}
+
+	test_waterfall() {
+		console.log("-- TESING REVERSENTH METHOD --");
+
+		let list = new List();
+		let NUM_ELEMENTS = 4;
+		
+		for (var i = 0; i < NUM_ELEMENTS; i++) {
+			list.insertBack(i);
+		}
+
+		console.log("-- BEFORE WATERFALL --");
+
+		list.print();
+
+		list.waterfall();
+
+		console.log("-- AFTER WATERFALl --");
+		list.print();
+	}
+
+	test_reverseNth() {
+		console.log("-- TESING REVERSENTH METHOD --")
+
+		let list = new List();
+		let NUM_ELEMENTS = 10;
+		
+		for (var i = 0; i < NUM_ELEMENTS; i++) {
+			list.insertBack(i);
+		}
+
+		console.log("-- BEFORE REVERSE --");
+		//console.log(list.head)
+		list.print();
+		//console.log(list.head)
+		list.reverseNth(2);
+
+		console.log("-- AFTER REVERSE --");
+		list.print();
 	}
 
 	test_reverse() {
 		console.log("-- TESING REVERSE METHOD --")
 		let list = new List();
-		let NUM_ELEMENTS = 2;
+		let NUM_ELEMENTS = 10;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertFront(i);
@@ -35,6 +81,7 @@ export class TestComponentComponent implements OnInit {
 
 		console.log("-- AFTER REVERSE --");
 		list.print();
+		//console.log("Size: " + list.calculateSize(list.head))
 	}
 
 	test_insertFront() {
