@@ -1,4 +1,6 @@
+import ListUtility from './list-utility';
 import { ListNode } from './list-node';
+
 
 export class List {
 
@@ -8,7 +10,7 @@ export class List {
 
     constructor(otherList: List = null) {
         if (otherList == null) {
-            this.head = new ListNode();
+            this.head = null;
             this.length = 0;
         }
         else {
@@ -21,24 +23,34 @@ export class List {
         if (splitPoint > this.length || this.length < 0) {
             throw new Error(splitPoint + " is an invalid splitPoint");
         }
-        else if (splitPoint == 1) {
-
-            return this.head;
-        }
 
         let lists = this._split(this.head,splitPoint);
-        this.head = lists["list1"];
+        this.head = lists["left"];
 
-        return lists["list2"];
+        return lists["right"];
     }
 
-    private _split(head: ListNode, splitPoint: number): {"list1","list2"} {
-        let head1: ListNode,
-            head2: ListNode;
+    private _split(head: ListNode, splitPoint: number): {"left","right"} {
+        let head1: ListNode = head,
+            head2: ListNode,
+            cursor: ListNode = head,
+            cursorShadow: ListNode;
 
+        if (splitPoint == 0) {
+            head1 = null;
+            head2 = head;
+        }
+        else if (splitPoint > 0) {
 
-
-        return {"list1":head1,"list2":head2};
+            for (let i = 0; i < splitPoint; i++) {
+                cursorShadow = cursor;
+                cursor = cursor.next;
+            }
+            cursorShadow.next = null;
+            head2 = cursor;
+        }
+        
+        return {"left":head1,"right":head2};
     }
 
     private copy(): void {
@@ -47,76 +59,28 @@ export class List {
     public print(reverse: boolean = false): void {
         let output,
             cursor = reverse ? this.tail : this.head;
-        output = this._getList(cursor,reverse);
+        output = ListUtility.GetList(cursor,reverse);
     }
 
     public getList(reverse: boolean = false): Array<any> {
         let output,
             cursor = reverse ? this.tail : this.head;
-        return this._getList(cursor,reverse);   
-    }
-
-    private _getList(head: ListNode,reverse: boolean): Array<any> {
-        return this._getListItems(head,reverse);
-    }
-
-    // Recursive print
-    private _getListItems(cursor: ListNode, reverse: boolean = false): Array<any> {
-        if (cursor == null) {
-            return [];
-        }
-
-        let node: ListNode = reverse ? cursor.prev : cursor.next;
-
-        return [cursor.data].concat(this._getListItems(node,reverse));
+        return ListUtility.GetList(cursor,reverse);   
     }
 
     public getSize(): number {
-        return this._getSize(this.head);
-    }
-
-    private _getSize(head: ListNode): number {
-        if (head == null) {
-            return 0;
-        }
-
-        return 1 + this._getSize(head.next);
-    }
-
-    private _reverse(head: ListNode): {"head","tail"} {
-        let length = this._getSize(head);
-        if (length < 1) { return; }
-        else if (length == 1) { return {"head":head,"tail":head}; }
- 
-        let cursor: ListNode = head, 
-            originalhead: ListNode = head, 
-            cursorShadow: ListNode = head,
-            temp: ListNode, tail: ListNode;
-
-        while(cursor != null) {
-            temp = cursor.prev;
-            cursor.prev = cursor.next;
-            cursor.next = temp;
-
-            cursorShadow = cursor;
-            cursor = cursor.prev;
-        }
-        
-        head = cursorShadow;
-        tail = originalhead;
-
-        return {"head":head,"tail":tail};
+        return ListUtility.GetSize(this.head);
     }
 
     public reverse() {
-        let temp: {"head","tail"} = this._reverse(this.head);
+        let temp: {"head","tail"} = ListUtility.Reverse(this.head);
         this.head = temp["head"];
         this.tail = temp["tail"]; 
     }
 
     public reverseNth(n: number): void {
         if (n < 2) { return }
-        else if (n >= this.length) { this.reverse(); return }
+        else if (n >= this.length) { this.reverse(); return; }
 
         let idx = 0,
             j = 0,
@@ -152,7 +116,7 @@ export class List {
 
             cursor.next = null;
 
-            endPoints = this._reverse(newHead);
+            endPoints = ListUtility.Reverse(newHead);
             start = endPoints["head"];
             end = endPoints["tail"];
 
@@ -200,60 +164,58 @@ export class List {
     }
 
     public waterfall(): void {
-        let endPoints: {"head","tail"} = this._waterfall(this.head, this.tail);
+        let endPoints: {"head","tail"} = ListUtility.Waterfall(this.head, this.tail);
         this.head = endPoints["head"];
         this.tail = endPoints["tail"];
-    }
-
-    private _waterfall(head: ListNode, tail: ListNode): {"head","tail"} {
-        if (this._getSize(head) < 2) return;
-
-        let cursor: ListNode = head, newHead: ListNode = head;
-        let newTail: ListNode, 
-            node: ListNode, 
-            shadowCursor: ListNode,
-            reflectionCursor: ListNode;
-        let currTail: ListNode = tail;
-
-        let skip: boolean = true;
-
-        while (cursor && cursor.next) {
-            
-            if (skip) {
-                cursor = cursor.next;
-                skip = !skip;
-                continue;
-            }
-
-            reflectionCursor = cursor.next;
-
-            if (cursor.prev) {
-                shadowCursor = cursor.prev;
-                shadowCursor.next = reflectionCursor;
-                reflectionCursor.prev = shadowCursor;
-            }
-            
-            // disconnect node
-            node = cursor;
-
-            // reconnection node at back
-            currTail.next = node;
-            node.prev = currTail;
-            currTail = node;
-            currTail.next = null;
-
-            cursor = reflectionCursor;
-            skip = !skip;
-        }
-
-        newTail = currTail;
-
-        return {"head": newHead, "tail": newTail};
     }
 
     public clear(): void {
         this.head = null;
         this.tail = null;
         this.length = 0;
+    }
+
+    public merge(otherHead: ListNode): ListNode {
+        this.head = ListUtility.Merge(this.head, otherHead);
+
+        return this.head;
+    }
+
+    public sort(): void {
+        this.head = this._mergesort(this.head,this.length);
+    }
+
+    private _mergesort(start: ListNode, chainLength: number): ListNode {
+        if (chainLength == 1) {
+            return start;
+        }
+
+        let newChainLength = Math.ceil(chainLength/2);
+
+        let lists = this._split(start,newChainLength);
+        let left: ListNode = this._mergesort(lists["left"], newChainLength);
+        let right: ListNode = this._mergesort(lists["right"], chainLength-newChainLength);
+
+        let mergedList = ListUtility.Merge(left,right);
+        return mergedList;
+    }
+
+    public getHead(): ListNode {
+        return this.head;
+    }
+
+    private _findTail(head: ListNode): ListNode {
+        if (head == null) {
+            return head;
+        }
+
+        let cursor = head,
+            shadowCursor = cursor;
+        while (cursor) {
+            shadowCursor = cursor;
+            cursor = cursor.next;
+        }
+
+        return shadowCursor;
     }
 }
