@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LinkedListComponent } from './linked-list.component'
+import { List } from './list'
+import ListUtility from './list-utility'
 
 describe('LinkedListComponent', () => {
     let component: LinkedListComponent;
@@ -128,11 +130,10 @@ describe('LinkedListComponent', () => {
             component.linkedList.insertBack(idx);
         }
 
-        component.linkedList.split(0);
+        let otherList = component.linkedList.split(0);
     
         let RESULT = [1,2,3,4,5,6,7,8,9,10]
-        expect(component.linkedList.getList()).toEqual(RESULT);
-        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+        expect(ListUtility.GetList(otherList)).toEqual(RESULT);
     });
 
     it('should split the list with splitPoint = 5', () => {
@@ -142,16 +143,15 @@ describe('LinkedListComponent', () => {
             component.linkedList.insertBack(idx);
         }
 
-        let firstHalf = component.linkedList.getList();
-        component.linkedList.split(5);
+        let list2 = component.linkedList.split(5);
     
         let firstHalf_RESULT = [1,2,3,4,5];
         let RESULT = [6,7,8,9,10]
 
         expect(component.linkedList.getList()).toEqual(firstHalf_RESULT);
         expect(component.linkedList.getSize()).toEqual(firstHalf_RESULT.length);
-        expect(component.linkedList.getList()).toEqual(RESULT);
-        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+        expect(ListUtility.GetList(list2)).toEqual(RESULT);
+        expect(ListUtility.GetSize(list2)).toEqual(RESULT.length);
     });
 
     it('should not split the list with splitPoint >= NUM_ELEMENTS', () => {
@@ -169,6 +169,145 @@ describe('LinkedListComponent', () => {
         expect(component.linkedList.getSize()).toEqual(RESULT.length);
     });
 
+    it('should merge 2 non empty lists, no ties', () => {
+        let NUM_ELEMENTS = 10;
+        
+        component.linkedList.insertBack(1);
+        component.linkedList.insertBack(3);
+        component.linkedList.insertBack(4);
+        component.linkedList.insertBack(6);
+
+        let list2: List = new List();
+        list2.insertBack(2);
+        list2.insertBack(5);
+        list2.insertBack(7);
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [1,2,3,4,5,6,7]
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should merge 2 non empty lists, with ties', () => {
+        let NUM_ELEMENTS = 10;
+        
+        component.linkedList.insertBack(1);
+        component.linkedList.insertBack(3);
+        component.linkedList.insertBack(4);
+        component.linkedList.insertBack(6);
+        component.linkedList.insertBack(9);
+        component.linkedList.insertBack(11);
+
+        let list2: List = new List();
+        list2.insertBack(2);
+        list2.insertBack(2);
+        list2.insertBack(3);
+        list2.insertBack(5);
+        list2.insertBack(8);
+        list2.insertBack(11);
+        list2.insertBack(13);
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [1,3,4,6,9,11,2,2,3,5,8,11,13];
+        RESULT.sort((a,b) => { return a-b });
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should merge 2 lists - second list empty', () => {
+        let NUM_ELEMENTS = 10;
+        
+        component.linkedList.insertBack(1);
+        component.linkedList.insertBack(3);
+        component.linkedList.insertBack(4);
+        component.linkedList.insertBack(6);
+
+        let list2: List = new List();
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [1,3,4,6];
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should merge 2 lists - first list empty', () => {
+        let NUM_ELEMENTS = 10;
+        
+
+        let list2: List = new List();
+        list2.insertBack(2);
+        list2.insertBack(2);
+        list2.insertBack(3);
+        list2.insertBack(5);
+        list2.insertBack(8);
+        list2.insertBack(11);
+        list2.insertBack(13);
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [2,2,3,5,8,11,13];
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should merge 2 empty lists', () => {
+        let NUM_ELEMENTS = 10;
+        
+
+        let list2: List = new List();
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [];
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should merge 2 lists of 1 item each', () => {
+        let NUM_ELEMENTS = 10;
+        
+
+        let list2: List = new List();
+        list2.insertBack(1);
+
+        component.linkedList.insertBack(4);
+
+        component.linkedList.merge(list2.getHead());
+    
+        let RESULT = [1,4]; 
+
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
+
+    it('should sort the entire list using mergesort', () => {
+        let NUM_ELEMENTS = 10;
+        
+        component.linkedList.insertBack(3);
+        component.linkedList.insertBack(6);
+        component.linkedList.insertBack(8);
+        component.linkedList.insertBack(2);
+        component.linkedList.insertBack(1);
+        component.linkedList.insertBack(11);
+        component.linkedList.insertBack(4);
+
+        component.linkedList.sort();
+    
+        let RESULT = [3,6,8,2,1,11,4];
+        RESULT.sort((a,b) => { return a-b });
+
+        console.log(component.linkedList.getList())
+        expect(component.linkedList.getList()).toEqual(RESULT);
+        expect(component.linkedList.getSize()).toEqual(RESULT.length);
+    });
 
 
 });
