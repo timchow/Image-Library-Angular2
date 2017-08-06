@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RgbaPixel } from '../rgba-pixel';
-import { Image } from '../image';
+import { RgbaPixel } from '../image/rgba-pixel';
+import { Photo } from '../image/image';
 import { List } from '../linked-list/list';
 
 @Component({
@@ -11,7 +11,7 @@ import { List } from '../linked-list/list';
 export class TestComponentComponent implements OnInit {
 
 	public pixel: RgbaPixel;
-	public image: Image;
+	public image: Photo;
 	public list: List;
 
 	constructor() {
@@ -121,6 +121,7 @@ export class TestComponentComponent implements OnInit {
 	}
 
 	test() {
+		/*
 		var img = <HTMLCanvasElement>document.getElementById("testImage");
 		var out = document.getElementById("out");
 		var in_canvas = <HTMLCanvasElement>document.createElement('canvas');
@@ -131,21 +132,22 @@ export class TestComponentComponent implements OnInit {
 		var imageData = ctx.getImageData(0,0,in_canvas.width, in_canvas.height);
 
 		// convert imageData to 2d rgbapixel 
-		this.image = new Image(imageData);
+		this.image = new Photo("");
 
 		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
 		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
-		this.image.draw(out_ctx);
+		this.image.drawOnCanvas(out_ctx);
 		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
 		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
-		this.image.draw(out_ctx);
+		this.image.draw(out_ctx);*/
 	}
 
 	rotate() {
+		/*
 		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
@@ -156,7 +158,7 @@ export class TestComponentComponent implements OnInit {
 		out_canvas.height = this.image.getHeight();
 		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
 		this.image.rotate180();
-		this.image.draw(out_ctx);
+		this.image.draw(out_ctx);*/
 	}
 
 }

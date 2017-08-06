@@ -218,4 +218,15 @@ export class List {
 
         return shadowCursor;
     }
+
+    public removeFront(): ListNode {
+        if (this.empty()) {
+            return null;
+        }
+
+        let front = this.head;
+        this.head = this.head.next;
+        this.length--;
+        return front;
+    }
 }

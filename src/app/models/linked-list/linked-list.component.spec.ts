@@ -304,7 +304,6 @@ describe('LinkedListComponent', () => {
         let RESULT = [3,6,8,2,1,11,4];
         RESULT.sort((a,b) => { return a-b });
 
-        console.log(component.linkedList.getList())
         expect(component.linkedList.getList()).toEqual(RESULT);
         expect(component.linkedList.getSize()).toEqual(RESULT.length);
     });
