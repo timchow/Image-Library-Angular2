@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestComponentComponent } from './models/test-component/test-component.component';
+import { ImageComponent } from './models/image/image.component';
 
 @Component({
   selector: 'app-root',

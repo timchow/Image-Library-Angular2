@@ -24,11 +24,7 @@ export class ImageComponent implements OnInit {
             console.log('Mouse position: ' + mousePos.x + ',' + mousePos.y);
 
             this.image.floodFill(Math.floor(mousePos.x),Math.floor(mousePos.y));
-            //this.image.drawOnCanvas(canvas);
         }, false);
-
-
-
     }
 
     ngOnInit() {

@@ -1,7 +1,8 @@
 import { List } from '../linked-list/list';
 import { ListNode } from '../linked-list/list-node';
+import { IBagStructure } from '../i-bag-structure';
 
-export class Stack {
+export class Stack implements IBagStructure {
 
     private stack: List;
 
@@ -26,7 +27,11 @@ export class Stack {
     }
 
     public remove(): any {
+        return this.pop();
+    }
 
+    public add(data: any): void {
+        return this.push(data);
     }
 
     public peek(): any  {

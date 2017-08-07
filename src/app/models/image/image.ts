@@ -1,6 +1,8 @@
 import { RgbaPixel } from './rgba-pixel';
 import { RgbaPixelNode } from './rgba-pixel-node';
 import { Stack } from '../stack/stack';
+import { Queue } from '../queue/queue';
+import { IBagStructure } from '../i-bag-structure';
 
 export class Photo {
     private pixels: RgbaPixelNode[][];
@@ -12,12 +14,12 @@ export class Photo {
 
     private ctx: CanvasRenderingContext2D;
 
-    private stack: Stack;
+    private bag: IBagStructure;
 
     // "/assets/Polaroid1.jpg"
     constructor(imageUrl: string) {
         this.pixels = [];
-        this.stack = new Stack();
+        this.bag = new Queue();
 
         this.initialize = new Promise((resolve, reject) => {
             var img = new Image();
@@ -164,42 +166,34 @@ export class Photo {
             let startNode = this.pixels[start_x][start_y];
             let currentNode: RgbaPixelNode,
                 distance: number;
-            this.stack.push(startNode);
+            this.bag.add(startNode);
 
+            while (!this.bag.isEmpty()) {
+                currentNode = this.bag.remove();
 
-            while (!this.stack.isEmpty()) {
-                setInterval(() => {
-                    currentNode = this.stack.pop();
-
-                    if (!currentNode.visited) {
-                        this.updateCanvas(currentNode)
-                        currentNode.visited = true;
-                        (currentNode.getNeighbors()).forEach(neighbor => {
-                            if (!neighbor.visited) {
-                                // Do action here
-                                let r_diff_sq = Math.pow((startNode.red - neighbor.red), 2);
-                                let g_diff_sq = Math.pow((startNode.green - neighbor.green), 2);
-                                let b_diff_sq = Math.pow((startNode.blue - neighbor.blue), 2);
-                                distance = Math.sqrt((r_diff_sq + g_diff_sq + b_diff_sq));
-                                if (distance < 100) {
-                                    neighbor.red = 255;
-                                    neighbor.green = 0;
-                                    neighbor.blue = 0;
-                                    this.stack.push(neighbor)
-                                }
-                                //this.updateCanvas(currentNode);
-
-
+                if (!currentNode.visited) {
+                    this.updateCanvas(currentNode)
+                    currentNode.visited = true;
+                    (currentNode.getNeighbors()).forEach(neighbor => {
+                        if (!neighbor.visited) {
+                            // Do action here
+                            let r_diff_sq = Math.pow((startNode.red - neighbor.red), 2);
+                            let g_diff_sq = Math.pow((startNode.green - neighbor.green), 2);
+                            let b_diff_sq = Math.pow((startNode.blue - neighbor.blue), 2);
+                            distance = Math.sqrt((r_diff_sq + g_diff_sq + b_diff_sq));
+                            if (distance < 50) {
+                                neighbor.red = 255;
+                                neighbor.green = 0;
+                                neighbor.blue = 0;
+                                this.bag.add(neighbor)
                             }
+                        }
 
-                        });
+                    });
 
-                    }
-                    this.updateCanvas(startNode);
-                }, 1000 / 15)
+                }
+                //this.updateCanvas(startNode);
             }
-            
         });
-
     }
 }

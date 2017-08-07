@@ -6,6 +6,7 @@ import { TestComponentComponent } from './models/test-component/test-component.c
 import { LinkedListComponent } from './models/linked-list/linked-list.component';
 import { StackComponent } from './models/stack/stack.component';
 import { ImageComponent } from './models/image/image.component';
+import { QueueComponent } from './models/queue/queue.component';
 
 @NgModule({
     declarations: [
@@ -13,7 +14,8 @@ import { ImageComponent } from './models/image/image.component';
         TestComponentComponent,
         LinkedListComponent,
         StackComponent,
-        ImageComponent
+        ImageComponent,
+        QueueComponent
     ],
     imports: [
         BrowserModule
