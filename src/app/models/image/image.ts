@@ -5,44 +5,52 @@ import { Queue } from '../queue/queue';
 import { IBagStructure } from '../i-bag-structure';
 
 export class Photo {
-    private pixels: RgbaPixelNode[][];
-    private width: number;
-    private height: number;
+    public pixels: RgbaPixelNode[][];
+    public width: number;
+    public height: number;
     private context: CanvasRenderingContext2D;
-    private initialize: Promise<any>;
+    public initialize: Promise<any>;
     private isLoaded: boolean = false;
 
-    private ctx: CanvasRenderingContext2D;
+    public ctx: CanvasRenderingContext2D;
 
-    private bag: IBagStructure;
+    private bag: IBagStructure<Stack>;
 
     // "/assets/Polaroid1.jpg"
-    constructor(imageUrl: string) {
+    constructor(imageUrl: string = null) {
         this.pixels = [];
-        this.bag = new Queue();
+        this.bag = new Stack();
+        let canvas = document.createElement('canvas');
+        this.ctx = canvas.getContext('2d');
 
-        this.initialize = new Promise((resolve, reject) => {
-            var img = new Image();
-            img.onload = () => {
-                let img_width = img.width,
-                    img_height = img.height,
-                    canvas = document.createElement('canvas'),
-                    context = canvas.getContext('2d');
+        if (imageUrl != null) {
+            this.initialize = new Promise((resolve, reject) => {
+                var img = new Image();
+                img.onload = () => {
+                    let img_width = img.width,
+                        img_height = img.height;
+                    this.ctx = canvas.getContext('2d');
 
-                this.width = canvas.height = img_width,
-                    this.height = canvas.width = img_height;
+                    this.width = canvas.height = img_width,
+                        this.height = canvas.width = img_height;
 
-                context.drawImage(img, 0, 0, img.width, img.height);
-                var imageData = context.getImageData(0, 0, img_width, img_height);
+                    this.ctx.drawImage(img, 0, 0, img.width, img.height);
+                    var imageData = this.ctx.getImageData(0, 0, img_width, img_height);
 
-                this.loadPixelsFromPhoto(imageData.data);
-                this.setNeighbors();
-                this.isLoaded = true;
+                    this.loadPixelsFromPhoto(imageData.data);
+                    this.setNeighbors();
+                    this.isLoaded = true;
 
+                    resolve();
+                };
+                img.src = imageUrl;
+            });
+        }
+        else {
+            this.initialize = new Promise((resolve, reject) => {
                 resolve();
-            };
-            img.src = imageUrl;
-        });
+            });
+        }
     }
 
     public getMousePos(canvas, evt) {
@@ -61,26 +69,29 @@ export class Photo {
         return this.height;
     }
 
-    public drawOnCanvas(emptyCanvas: HTMLCanvasElement): void {
-        this.initialize.then(() => {
-            emptyCanvas.height = this.height;
-            emptyCanvas.width = this.width;
+    public drawOnCanvas(emptyCanvas: HTMLCanvasElement = null): any {
+        if (emptyCanvas == null) {
+            emptyCanvas = this.ctx.canvas;
+        }
+        debugger;
+        emptyCanvas.height = this.height;
+        emptyCanvas.width = this.width;
 
-            let ctx = emptyCanvas.getContext('2d');
+        let ctx = emptyCanvas.getContext('2d');
 
-            for (var x = 0; x < this.width; x++) {
-                for (var y = 0; y < this.height; y++) {
-                    var pixel = this.pixels[x][y];
-                    ctx.fillStyle = `rgba(${pixel.red},
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                var pixel = this.pixels[x][y];
+                ctx.fillStyle = `rgba(${pixel.red},
                                         ${pixel.green},
                                         ${pixel.blue},
                                         ${pixel.alpha})`;
-                    ctx.fillRect(x, y, 1, 1);
-                }
+                ctx.fillRect(x, y, 1, 1);
             }
-            this.ctx = ctx;
-            this.ctx.save();
-        });
+        }
+        this.ctx = ctx;
+        this.ctx.save();
+        return this.ctx;
     }
 
     public updateCanvas(pixelNode: RgbaPixelNode) {
@@ -151,6 +162,12 @@ export class Photo {
         if (!this.isLoaded) return null;
 
         return this.pixels;
+    }
+
+    public getPixel(x: number, y: number): RgbaPixelNode {
+        if (x >= 0 && x <= this.width && y >= 0 && y <= this.height) {
+            return this.pixels[x][y];
+        }
     }
 
     public floodFill(start_x: number, start_y: number): void {

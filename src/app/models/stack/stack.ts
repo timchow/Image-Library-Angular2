@@ -2,7 +2,7 @@ import { List } from '../linked-list/list';
 import { ListNode } from '../linked-list/list-node';
 import { IBagStructure } from '../i-bag-structure';
 
-export class Stack implements IBagStructure {
+export class Stack implements IBagStructure<Stack> {
 
     private stack: List;
 

@@ -2,7 +2,7 @@ import { List } from '../linked-list/list';
 import { ListNode } from '../linked-list/list-node';
 import { IBagStructure } from '../i-bag-structure';
 
-export class Queue implements IBagStructure {
+export class Queue implements IBagStructure<Queue> {
     private queue: List;
 
     constructor() {
