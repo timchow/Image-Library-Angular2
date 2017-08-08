@@ -7,6 +7,7 @@ import { LinkedListComponent } from './models/linked-list/linked-list.component'
 import { StackComponent } from './models/stack/stack.component';
 import { ImageComponent } from './models/image/image.component';
 import { QueueComponent } from './models/queue/queue.component';
+import { QuadtreeComponent } from './models/quadtree/quadtree.component';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { QueueComponent } from './models/queue/queue.component';
         LinkedListComponent,
         StackComponent,
         ImageComponent,
-        QueueComponent
+        QueueComponent,
+        QuadtreeComponent
     ],
     imports: [
         BrowserModule

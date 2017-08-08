@@ -1,4 +1,4 @@
-export interface IBagStructure {
+export interface IBagStructure<T> {
     add(data: any): void;
     remove(): any;
     peek(): any;
