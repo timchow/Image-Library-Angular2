@@ -9,6 +9,10 @@ export class QuadtreeNode<T> {
     public data: T;
     public mapped_x: number;
     public mapped_y: number;
+    public min_children_x: number;
+    public max_children_x: number;
+    public min_children_y: number;
+    public max_children_y: number;
 
     constructor(_data: T = null) {
         this.nwChild = null;//new QuadtreeNode<T>();

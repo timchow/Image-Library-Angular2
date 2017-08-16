@@ -138,8 +138,8 @@ export class Photo {
                 let red = data[idx],
                     green = data[idx + 1],
                     blue = data[idx + 2],
-                    alpha = data[idx + 3] / 255;
-                this.pixels[x][y] = new RgbaPixelNode(x, y, red, green, blue);
+                    alpha = data[idx + 3];
+                this.pixels[x][y] = new RgbaPixelNode(x, y, red, green, blue, alpha);
             }
         }
     }
@@ -156,6 +156,7 @@ export class Photo {
         [a.red, b.red] = [b.red, a.red];
         [a.green, b.green] = [b.green, a.green];
         [a.blue, b.blue] = [b.blue, a.blue];
+        [a.alpha, b.alpha] = [b.alpha,a.alpha];
     }
 
     public getPixels(): RgbaPixel[][] {

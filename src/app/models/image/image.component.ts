@@ -11,21 +11,32 @@ import * as $ from 'jquery';
 export class ImageComponent implements OnInit {
 
     private image: Photo;
+    private image2: Photo;
     private quadtree: Quadtree;
 
     constructor() {
         this.image = new Photo("/assets/Polaroid2.jpg");
+        //this.image = new Photo("/assets/in_1.jpg");
+        this.image2 = new Photo("/assets/Polaroid2.jpg");
+        //this.image = new Photo("/assets/in_2.jpg");
         let canvas = document.createElement('canvas');
+        let canvas2 = document.createElement('canvas');
         $(canvas).addClass("can")
         this.quadtree = new Quadtree();
         this.image.initialize.then(() => {
-            this.quadtree.buildTree(this.image, 512);
-            this.image = this.quadtree.decompress();
-            debugger;
-            //canvas = this.image.drawOnCanvas(canvas).canvas;
             let appImage = document.getElementsByTagName("app-image");
-            appImage[0].appendChild(this.image.ctx.canvas);
-        })
+            this.quadtree.buildTree(this.image, this.image.height);
+            this.quadtree.prune(100);
+            this.image = this.quadtree.decompress();
+             appImage[0].appendChild(this.image.ctx.canvas);
+        });
+
+        this.image2.initialize.then(()=>{
+            let appImage = document.getElementsByTagName("app-image");
+            this.quadtree.buildTree(this.image2, this.image2.height);
+            this.image2 = this.quadtree.decompress();
+            appImage[0].appendChild(this.image2.ctx.canvas);
+        });
 
         /*
         canvas.addEventListener('click', (evt) => {

@@ -8,5 +8,5 @@ import { ImageComponent } from './models/image/image.component';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'app';
+  title = "";//'app';
 }

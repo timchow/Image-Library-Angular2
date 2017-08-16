@@ -7,8 +7,8 @@ export class RgbaPixelNode extends RgbaPixel {
     public x: number;
     public y: number;
 
-    constructor(_x, _y, _red: number = 0, _green: number = 0, _blue: number = 0) {
-        super(_red,_green,_blue);
+    constructor(_x, _y, _red: number = 0, _green: number = 0, _blue: number = 0, _alpha: number = 0) {
+        super(_red,_green,_blue,_alpha);
         this.x = _x;
         this.y = _y;
         this.visited = false;
