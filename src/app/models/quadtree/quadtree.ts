@@ -1,6 +1,8 @@
 import { QuadtreeNode } from './quadtree-node';
 import { Photo } from '../image/image';
 import { RgbaPixel } from '../image/rgba-pixel';
+import { SvgElement } from '../image/svg-element';
+import { Queue } from '../queue/queue';
 
 export class Quadtree {
     public root: QuadtreeNode<RgbaPixel>;
@@ -61,9 +63,7 @@ export class Quadtree {
     }
 
     public prune(tolerance: number): void {
-        debugger;
         this.root = this._prune(this.root, tolerance);
-        debugger;
     }
 
     private _prune(root: QuadtreeNode<RgbaPixel>, tolerance: number): QuadtreeNode<RgbaPixel> {
@@ -112,8 +112,6 @@ export class Quadtree {
                                         ${Math.floor(pixel.green)},
                                         ${Math.floor(pixel.blue)})`;
                 ctx.fillRect(root.mapped_x, root.mapped_y, 1, 1);
-                debugger;
-                //return;
             }
             else if (root.min_children_x) {
                 pixel = root.data;
@@ -203,5 +201,150 @@ export class Quadtree {
         this.colorMap(root, cursor.nwChild);
         this.colorMap(root, cursor.seChild);
         this.colorMap(root, cursor.swChild);
+    }
+
+    public getQuadTreeHeight(): number {
+        return Math.log2(this.resolution);
+    }
+
+    public prettyPrint(): void {
+        let levels: Array<Array<QuadtreeNode<RgbaPixel>>> = [];
+        let level: Array<QuadtreeNode<RgbaPixel>> = [];
+        let root = this.root;
+
+        level.push(root);
+        root.createElement("circle");
+        levels.push(level);
+
+        let levelsIdx = 0;
+
+
+        for (let idx = 0; idx < this.getQuadTreeHeight(); idx++) {
+            let item = levels[idx];
+            level = [];
+            item.forEach((node: QuadtreeNode<RgbaPixel>) => {
+                if (node.nwChild) {
+                    node.nwChild.createElement("circle");
+                    level.push(node.nwChild);
+                }
+                if (node.neChild) {
+                    node.neChild.createElement("circle");
+                    level.push(node.neChild);
+                }
+                if (node.swChild) {
+                    node.swChild.createElement("circle");
+                    level.push(node.swChild);
+                }
+                if (node.seChild) {
+                    node.seChild.createElement("circle");
+                    level.push(node.seChild);
+                }
+            });
+            levels.push(level);
+        }
+
+        //let svg = document.createElement("svg");
+        let svg = document.getElementById("svg");
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svg.setAttribute("version", "1.1")
+        //svg.setAttribute("_ngcontent-c1","");
+        let svgUrl = "http://www.w3.org/2000/svg";
+        //let circle = document.createElementNS(svgUrl, "circle");
+        //svg.appendChild(circle);
+        let numLeaves = levels[levels.length - 1].length;
+        let width = (numLeaves * 60
+        ) + 10;
+        let height = this.getQuadTreeHeight() * 1000;
+        svg.setAttribute("width", width.toString() + "px");
+        svg.setAttribute("height", height.toString() + "px");
+        let heightDif = 800;
+        levels = levels.reverse();
+        let x_position = 10;
+        levels.forEach(level => {
+            let idx = 1;
+            level.forEach(node => {
+                
+                if (node.neChild == null && node.nwChild == null && node.swChild == null && node.seChild == null) {
+                    node.svgElement.x = x_position;
+                    node.svgElement.y = height - 10;
+                    x_position += 50;
+                }
+                if (node.nwChild) {
+                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
+                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+
+                    let nwLine = new SvgElement("line");
+
+                    nwLine.setAttribute("x1", node.nwChild.svgElement.x.toString());
+                    nwLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
+                    nwLine.setAttribute("x2", node.svgElement.x.toString());
+                    nwLine.setAttribute("y2", node.svgElement.y.toString());
+                    nwLine.setAttribute("stroke-width", "2");
+                    nwLine.setAttribute("stroke", "black");
+                    svg.appendChild(nwLine.element);
+                }
+
+                if (node.neChild) {
+                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
+                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+                    let neLine = new SvgElement("line");
+                    neLine.setAttribute("x1", node.neChild.svgElement.x.toString());
+                    neLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
+                    neLine.setAttribute("x2", node.svgElement.x.toString());
+                    neLine.setAttribute("y2", node.svgElement.y.toString());
+                    neLine.setAttribute("stroke-width", "2");
+                    neLine.setAttribute("stroke", "black");
+                    svg.appendChild(neLine.element);
+                }
+
+                if (node.swChild) {
+                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
+                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+                    let swLine = new SvgElement("line");
+                    swLine.setAttribute("x1", node.swChild.svgElement.x.toString());
+                    swLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
+                    swLine.setAttribute("x2", node.svgElement.x.toString());
+                    swLine.setAttribute("y2", node.svgElement.y.toString());
+                    swLine.setAttribute("stroke-width", "2");
+                    swLine.setAttribute("stroke", "black");
+                    svg.appendChild(swLine.element);
+                }
+
+
+                if (node.seChild) {
+                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
+                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+                    let seLine = new SvgElement("line");
+                    seLine.setAttribute("x1", node.seChild.svgElement.x.toString());
+                    seLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
+                    seLine.setAttribute("x2", node.svgElement.x.toString());
+                    seLine.setAttribute("y2", node.svgElement.y.toString());
+                    seLine.setAttribute("stroke-width", "2");
+                    seLine.setAttribute("stroke", "black");
+                    svg.appendChild(seLine.element);
+                }
+
+                node.svgElement.setAttribute("cx", node.svgElement.x + "px");
+                node.svgElement.setAttribute("cy", node.svgElement.y + "px");
+                node.svgElement.setAttribute("height", "10px");
+                node.svgElement.setAttribute("width", "10px")
+                node.svgElement.setAttribute("r", "10px");
+
+                svg.appendChild(node.svgElement.element);
+            });
+            height = height - 100;
+        });
+
+
+        let appImage = document.getElementsByTagName("app-image");
+        appImage[0].appendChild(svg);
+
+        debugger;
+    }
+
+    private fillQueue(root: QuadtreeNode<RgbaPixel>, q: Queue): void {
+        if (!root.neChild) return;
+
+
     }
 }

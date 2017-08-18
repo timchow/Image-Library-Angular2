@@ -1,4 +1,5 @@
 import { RgbaPixel } from './rgba-pixel';
+import { SvgElement } from './svg-element';
 
 export class RgbaPixelNode extends RgbaPixel {
 
