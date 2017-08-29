@@ -15,6 +15,7 @@ export class QuadtreeNode<T> {
     public min_children_y: number;
     public max_children_y: number;
     public svgElement: SvgElement;
+    public isActive: boolean;
 
     constructor(_data: T = null) {
         this.nwChild = null;//new QuadtreeNode<T>();
@@ -23,11 +24,18 @@ export class QuadtreeNode<T> {
         this.seChild = null;//new QuadtreeNode<T>();
 
         this.data = _data;
+        this.isActive = true;
+        this.createElement("circle");
     }
 
 
     public createElement(type: string): SvgElement {
         this.svgElement = new SvgElement(type);
+        
+        if (this.data instanceof RgbaPixel) {
+            this.svgElement.setAttribute("fill",`rgb(${(<RgbaPixel><any>this.data).red},${(<RgbaPixel><any>this.data).green},${(<RgbaPixel><any>this.data).blue})`);
+        }
+        
         return this.svgElement;
     }
 }

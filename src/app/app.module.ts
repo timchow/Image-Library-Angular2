@@ -8,6 +8,7 @@ import { StackComponent } from './models/stack/stack.component';
 import { ImageComponent } from './models/image/image.component';
 import { QueueComponent } from './models/queue/queue.component';
 import { QuadtreeComponent } from './models/quadtree/quadtree.component';
+import { BinarySearchTreeComponent } from './data-structures/binary-search-tree/binary-search-tree.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { QuadtreeComponent } from './models/quadtree/quadtree.component';
         StackComponent,
         ImageComponent,
         QueueComponent,
-        QuadtreeComponent
+        QuadtreeComponent,
+        BinarySearchTreeComponent
     ],
     imports: [
         BrowserModule

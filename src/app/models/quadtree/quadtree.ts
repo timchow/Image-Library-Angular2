@@ -68,7 +68,8 @@ export class Quadtree {
 
     private _prune(root: QuadtreeNode<RgbaPixel>, tolerance: number): QuadtreeNode<RgbaPixel> {
         if (this.shouldPrune(root, root, tolerance)) {
-            root = this.clearChildren(root);
+                root = this.clearChildren(root);
+                root.isActive = false;
         }
         else {
             root.neChild = this._prune(root.neChild, tolerance);
@@ -93,10 +94,14 @@ export class Quadtree {
     }
 
     private clearChildren(root: QuadtreeNode<RgbaPixel>): QuadtreeNode<RgbaPixel> {
-        root.neChild = null;
-        root.nwChild = null;
-        root.seChild = null;
-        root.swChild = null;
+        //root.neChild = null;
+        //root.nwChild = null;
+        //root.seChild = null;
+        //root.swChild = null;
+        if (root.neChild) root.neChild.isActive = false;
+        if (root.nwChild) root.nwChild.isActive = false;
+        if (root.seChild) root.seChild.isActive = false;
+        if (root.swChild) root.swChild.isActive = false;
 
         return root;
     }
@@ -207,53 +212,36 @@ export class Quadtree {
         return Math.log2(this.resolution);
     }
 
-    public prettyPrint(): void {
+    private getLevelsOfQuadTree(): Array<Array<QuadtreeNode<RgbaPixel>>> {
         let levels: Array<Array<QuadtreeNode<RgbaPixel>>> = [];
-        let level: Array<QuadtreeNode<RgbaPixel>> = [];
-        let root = this.root;
-
-        level.push(root);
-        root.createElement("circle");
+        let level: Array<QuadtreeNode<RgbaPixel>> = [this.root];
         levels.push(level);
-
-        let levelsIdx = 0;
-
 
         for (let idx = 0; idx < this.getQuadTreeHeight(); idx++) {
             let item = levels[idx];
             level = [];
             item.forEach((node: QuadtreeNode<RgbaPixel>) => {
                 if (node.nwChild) {
-                    node.nwChild.createElement("circle");
                     level.push(node.nwChild);
                 }
                 if (node.neChild) {
-                    node.neChild.createElement("circle");
                     level.push(node.neChild);
                 }
                 if (node.swChild) {
-                    node.swChild.createElement("circle");
                     level.push(node.swChild);
                 }
                 if (node.seChild) {
-                    node.seChild.createElement("circle");
                     level.push(node.seChild);
                 }
             });
             levels.push(level);
         }
+        return levels;
+    }
 
-        //let svg = document.createElement("svg");
-        let svg = document.getElementById("svg");
-        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        svg.setAttribute("version", "1.1")
-        //svg.setAttribute("_ngcontent-c1","");
-        let svgUrl = "http://www.w3.org/2000/svg";
-        //let circle = document.createElementNS(svgUrl, "circle");
-        //svg.appendChild(circle);
+    private appendLevelElementsToSVG(levels: Array<Array<QuadtreeNode<RgbaPixel>>>, svg: HTMLElement): HTMLElement {
         let numLeaves = levels[levels.length - 1].length;
-        let width = (numLeaves * 60
-        ) + 10;
+        let width = (numLeaves * 60) + 10;
         let height = this.getQuadTreeHeight() * 1000;
         svg.setAttribute("width", width.toString() + "px");
         svg.setAttribute("height", height.toString() + "px");
@@ -263,16 +251,22 @@ export class Quadtree {
         levels.forEach(level => {
             let idx = 1;
             level.forEach(node => {
-                
                 if (node.neChild == null && node.nwChild == null && node.swChild == null && node.seChild == null) {
                     node.svgElement.x = x_position;
                     node.svgElement.y = height - 10;
                     x_position += 50;
                 }
-                if (node.nwChild) {
+                else {
                     node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
                     node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+                }
 
+                if (!node.isActive) {
+                    node.svgElement.setAttribute("fill", "white");
+                }
+
+                if (node.nwChild) {
+                    
                     let nwLine = new SvgElement("line");
 
                     nwLine.setAttribute("x1", node.nwChild.svgElement.x.toString());
@@ -280,47 +274,41 @@ export class Quadtree {
                     nwLine.setAttribute("x2", node.svgElement.x.toString());
                     nwLine.setAttribute("y2", node.svgElement.y.toString());
                     nwLine.setAttribute("stroke-width", "2");
-                    nwLine.setAttribute("stroke", "black");
+                    nwLine.setAttribute("stroke", node.nwChild.isActive ? "black" : "white");
                     svg.appendChild(nwLine.element);
                 }
 
                 if (node.neChild) {
-                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
-                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
                     let neLine = new SvgElement("line");
                     neLine.setAttribute("x1", node.neChild.svgElement.x.toString());
                     neLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
                     neLine.setAttribute("x2", node.svgElement.x.toString());
                     neLine.setAttribute("y2", node.svgElement.y.toString());
                     neLine.setAttribute("stroke-width", "2");
-                    neLine.setAttribute("stroke", "black");
+                    neLine.setAttribute("stroke", node.neChild.isActive ? "black" : "white");
                     svg.appendChild(neLine.element);
                 }
 
                 if (node.swChild) {
-                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
-                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
                     let swLine = new SvgElement("line");
                     swLine.setAttribute("x1", node.swChild.svgElement.x.toString());
                     swLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
                     swLine.setAttribute("x2", node.svgElement.x.toString());
                     swLine.setAttribute("y2", node.svgElement.y.toString());
                     swLine.setAttribute("stroke-width", "2");
-                    swLine.setAttribute("stroke", "black");
+                    swLine.setAttribute("stroke", node.swChild.isActive ? "black" : "white");
                     svg.appendChild(swLine.element);
                 }
 
 
                 if (node.seChild) {
-                    node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
-                    node.svgElement.y = (node.neChild.svgElement.y - heightDif);
                     let seLine = new SvgElement("line");
                     seLine.setAttribute("x1", node.seChild.svgElement.x.toString());
                     seLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
                     seLine.setAttribute("x2", node.svgElement.x.toString());
                     seLine.setAttribute("y2", node.svgElement.y.toString());
                     seLine.setAttribute("stroke-width", "2");
-                    seLine.setAttribute("stroke", "black");
+                    seLine.setAttribute("stroke", node.seChild.isActive ? "black" : "white");
                     svg.appendChild(seLine.element);
                 }
 
@@ -328,14 +316,25 @@ export class Quadtree {
                 node.svgElement.setAttribute("cy", node.svgElement.y + "px");
                 node.svgElement.setAttribute("height", "10px");
                 node.svgElement.setAttribute("width", "10px")
-                node.svgElement.setAttribute("r", "10px");
+                node.svgElement.setAttribute("r", "20px");
 
                 svg.appendChild(node.svgElement.element);
             });
             height = height - 100;
+            idx++;
         });
 
+        return svg;
+    }
 
+    public prettyPrint(): void {
+        let levels: Array<Array<QuadtreeNode<RgbaPixel>>> = this.getLevelsOfQuadTree();
+
+        let svg = document.getElementById("svg");
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svg.setAttribute("version", "1.1")
+
+        svg = this.appendLevelElementsToSVG(levels, svg);
         let appImage = document.getElementsByTagName("app-image");
         appImage[0].appendChild(svg);
 
