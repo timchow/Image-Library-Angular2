@@ -92,7 +92,11 @@ export class BinarySearchTree implements IGraph {
         return PrintUtility.height(this.root);
     }
 
-    public prettyPrint() {
+    public prettyPrint(svg): HTMLElement {
+        return PrintUtility.prettyPrint(this.root,svg);
+    }
 
+    public Convert() {
+        return PrintUtility.ConvertToPerfectTree(this.root, this.height(), this.numNeighbors);
     }
 }

@@ -10,8 +10,11 @@ export class BinarySearchTreeComponent implements OnInit {
 
     public bst: BinarySearchTree;
     constructor() {
+
+    }
+
+    ngOnInit() {
         this.bst = new BinarySearchTree();
-        //debugger;
         this.bst.addVertex(16);
         this.bst.addVertex(8);
         this.bst.addVertex(24);
@@ -21,9 +24,15 @@ export class BinarySearchTreeComponent implements OnInit {
         this.bst.addVertex(23)
         console.log(this.bst.print())
         this.bst.height()
-    }
 
-    ngOnInit() {
+        let svg = document.getElementById("svg");
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svg.setAttribute("version", "1.1")
+
+        svg = this.bst.prettyPrint(svg);
+        let appImage = document.getElementsByTagName("app-binary-search-tree");
+        appImage[0].appendChild(svg);
+        //this.bst.Convert();
     }
 
 }

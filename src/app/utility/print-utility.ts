@@ -1,41 +1,47 @@
 import { GraphVertex } from '../models/graph-vertex';
 import { IGraph } from '../interfaces/i-graph';
+import { SvgElement } from '../models/image/svg-element';
 
 export default class PrintUtility {
-    static prettyPrint() {
-        this.prettyPrint();
+    static prettyPrint(root: GraphVertex, svg): HTMLElement {
+        return _prettyPrint(root, svg);
     }
 
     static height(root: GraphVertex) {
         return _height(root) - 1;
     }
+
+    static ConvertToPerfectTree(root: GraphVertex, height: number, numNeighbors: number) {
+        return _convertToPerfectTree(root, height, numNeighbors);
+    }
 }
 
 // Private functions - not exposed as a part of static class ListUtility
 
-export function prettyPrint() {
-    let levels: Array<Array<GraphVertex>> = this.getLevelsOfQuadTree();
+export function _prettyPrint(root: GraphVertex, svg): HTMLElement {
+    let height = _height(root);
+    let numNeighbors = root.neighbors.length;
+    let clonedRoot = _clone(root, height + 1);
+    let levels: Array<Array<GraphVertex>> = getLevelsOfTree(clonedRoot, height);
 
-    let svg = document.getElementById("svg");
-    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svg.setAttribute("version", "1.1")
+    debugger;
+    svg = appendLevelElementsToSVG(levels, svg);
+    // Add here
 
-    svg = this.appendLevelElementsToSVG(levels, svg);
+    return svg;
 }
 
-export function getLevelsOfQuadTree(root: GraphVertex): Array<Array<GraphVertex>> {
+export function getLevelsOfTree(root: GraphVertex, height: number): Array<Array<GraphVertex>> {
     let levels: Array<Array<GraphVertex>> = [];
     let level: Array<GraphVertex> = [root];
-    levels.push(level);
 
-    for (let idx = 0; idx < this.getQuadTreeHeight(); idx++) {
+    levels.push(level);
+    for (let idx = 0; idx < height - 1; idx++) {
         let item = levels[idx];
         level = [];
         item.forEach((node: GraphVertex) => {
             node.neighbors.forEach((n) => {
-                if (n) {
-                    level.push(n)
-                }
+                level.push(n);
             })
         });
         levels.push(level);
@@ -43,95 +49,73 @@ export function getLevelsOfQuadTree(root: GraphVertex): Array<Array<GraphVertex>
     return levels;
 }
 
-/*
+// TODO: Make this work!
 export function appendLevelElementsToSVG(levels: Array<Array<GraphVertex>>, svg: HTMLElement): HTMLElement {
     let numLeaves = levels[levels.length - 1].length;
-    let width = (numLeaves * 60) + 10;
-    let height = this.getQuadTreeHeight() * 1000;
+    let width = (numLeaves * 800) + 10;
+    let height = levels.length * 1000;
     svg.setAttribute("width", width.toString() + "px");
     svg.setAttribute("height", height.toString() + "px");
-    let heightDif = 800;
+    let heightDif = 1000;
     levels = levels.reverse();
-    let x_position = 10;
+    let x_position = width/2;
+    let idx = 1;
     levels.forEach(level => {
-        let idx = 1;
         level.forEach(node => {
-            if (node.neChild == null && node.nwChild == null && node.swChild == null && node.seChild == null) {
-                node.svgElement.x = x_position;
-                node.svgElement.y = height - 10;
-                x_position += 50;
+            // leaves
+            if (idx == 1) {
+                node.svgCoord = {"x": x_position, 
+                                "y": height-100};
+                x_position += 300;
             }
+            // inner nodes
             else {
-                node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
-                node.svgElement.y = (node.neChild.svgElement.y - heightDif);
+                node.svgCoord = {"x": node.neighbors.map(n => n.svgCoord.x).reduce((x1, x2) => x1 + x2) / node.neighbors.length,
+                                 "y": (node.neighbors.map(n => n.svgCoord).find(n => n != null).y - heightDif)}
+
+                node.neighbors.forEach(neighbor => {
+                    let line = new SvgElement("line");
+
+                    line.setAttribute("x1", neighbor.svgCoord.x.toString());
+                    line.setAttribute("y1", neighbor.svgCoord.y.toString());
+                    line.setAttribute("x2", node.svgCoord.x.toString());
+                    line.setAttribute("y2", node.svgCoord.y.toString());
+                    line.setAttribute("stroke-width", "2");
+                    line.setAttribute("stroke", "black");
+                    if (neighbor.data != -1) {
+                        svg.appendChild(line.element);
+                    }
+                    
+                });
             }
 
-            if (!node.isActive) {
-                node.svgElement.setAttribute("fill", "white");
+            node.svgElements.find(n => n.type == "circle" ).setAttribute("cx", node.svgCoord.x + "px");
+            node.svgElements.find(n => n.type == "circle").setAttribute("cy", node.svgCoord.y + "px");
+            node.svgElements.find(n => n.type == "text" ).setAttribute("x", node.svgCoord.x-20 + "px");
+            node.svgElements.find(n => n.type == "text").setAttribute("y", node.svgCoord.y+20 + "px");
+            node.svgElements.find(n => n.type == "circle").setAttribute("height", "10px");
+            node.svgElements.find(n => n.type == "circle").setAttribute("width", "10px")
+            node.svgElements.find(n => n.type == "circle").setAttribute("r", "50px");
+            node.svgElements.find(n => n.type == "text").setAttribute("font-size", "50px");
+            node.svgElements.find(n => n.type == "text").element.innerHTML = node.data;
+
+
+            if (node.data != -1) {
+                node.svgElements.find(n => n.type == "circle").element.setAttribute("fill","white");
+                node.svgElements.find(n => n.type == "circle").element.setAttribute("stroke","black");
+                svg.appendChild(node.svgElements.find(n => n.type == "circle").element);
+                
+                node.svgElements.find(n => n.type == "text").element.setAttribute("fill","red");
+                svg.appendChild(node.svgElements.find(n => n.type == "text").element);
             }
-
-            if (node.nwChild) {
-
-                let nwLine = new SvgElement("line");
-
-                nwLine.setAttribute("x1", node.nwChild.svgElement.x.toString());
-                nwLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
-                nwLine.setAttribute("x2", node.svgElement.x.toString());
-                nwLine.setAttribute("y2", node.svgElement.y.toString());
-                nwLine.setAttribute("stroke-width", "2");
-                nwLine.setAttribute("stroke", node.nwChild.isActive ? "black" : "white");
-                svg.appendChild(nwLine.element);
-            }
-
-            if (node.neChild) {
-                let neLine = new SvgElement("line");
-                neLine.setAttribute("x1", node.neChild.svgElement.x.toString());
-                neLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
-                neLine.setAttribute("x2", node.svgElement.x.toString());
-                neLine.setAttribute("y2", node.svgElement.y.toString());
-                neLine.setAttribute("stroke-width", "2");
-                neLine.setAttribute("stroke", node.neChild.isActive ? "black" : "white");
-                svg.appendChild(neLine.element);
-            }
-
-            if (node.swChild) {
-                let swLine = new SvgElement("line");
-                swLine.setAttribute("x1", node.swChild.svgElement.x.toString());
-                swLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
-                swLine.setAttribute("x2", node.svgElement.x.toString());
-                swLine.setAttribute("y2", node.svgElement.y.toString());
-                swLine.setAttribute("stroke-width", "2");
-                swLine.setAttribute("stroke", node.swChild.isActive ? "black" : "white");
-                svg.appendChild(swLine.element);
-            }
-
-
-            if (node.seChild) {
-                let seLine = new SvgElement("line");
-                seLine.setAttribute("x1", node.seChild.svgElement.x.toString());
-                seLine.setAttribute("y1", node.nwChild.svgElement.y.toString());
-                seLine.setAttribute("x2", node.svgElement.x.toString());
-                seLine.setAttribute("y2", node.svgElement.y.toString());
-                seLine.setAttribute("stroke-width", "2");
-                seLine.setAttribute("stroke", node.seChild.isActive ? "black" : "white");
-                svg.appendChild(seLine.element);
-            }
-
-            node.svgElement.setAttribute("cx", node.svgElement.x + "px");
-            node.svgElement.setAttribute("cy", node.svgElement.y + "px");
-            node.svgElement.setAttribute("height", "10px");
-            node.svgElement.setAttribute("width", "10px")
-            node.svgElement.setAttribute("r", "20px");
-
-            svg.appendChild(node.svgElement.element);
+            
         });
-        height = height - 100;
+        height = height - 50;
         idx++;
     });
 
     return svg;
 }
-*/
 
 // For tree-like structures
 export function _height(root: GraphVertex) {
@@ -141,8 +125,49 @@ export function _height(root: GraphVertex) {
 
     let max = 0;
     for (let i = 0; i < root.neighbors.length; i++) {
-         max = Math.max(max,_height(root.neighbors[i]));
+        max = Math.max(max, _height(root.neighbors[i]));
     }
 
     return max + 1;
+}
+
+export function _convertToPerfectTree(root: GraphVertex, height: number, numNeighbors: number, depth = 0): GraphVertex {
+    let clonedRoot = _clone(root, height + 1);
+    let levels: Array<Array<GraphVertex>> = [];
+    let level: Array<GraphVertex> = [clonedRoot];
+    levels.push(level);
+    let idx = 0;
+    while (idx < height) {
+        level = levels[idx];
+        let newLevel = [];
+
+        level.forEach((nodes) => {
+            nodes.neighbors.forEach((neighbor) => {
+                let data = neighbor ? neighbor.data : -1;
+                neighbor = new GraphVertex(data, numNeighbors);
+                newLevel.push(neighbor);
+            });
+        });
+        levels.push(newLevel);
+        idx++;
+    };
+    return clonedRoot;
+}
+
+// Cloning a BST into a perfect BST with placeholder nodes
+export function _clone(root: GraphVertex, height, depth = 0) {
+    if (depth == height) {
+        return null;
+    }
+
+    let data = root ? root.data : -1;
+
+    let numNeighbors = root ? root.neighbors.length : 2/*handle this later*/;
+    let newRoot = new GraphVertex(data, numNeighbors);
+
+    for (let idx = 0; idx < numNeighbors; idx++) {
+        newRoot.neighbors[idx] = _clone(root ? root.neighbors[idx] : null, height, depth + 1);
+    }
+
+    return newRoot;
 }

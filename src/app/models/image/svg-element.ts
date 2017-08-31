@@ -4,9 +4,11 @@ export class SvgElement {
     private parent: Element;
     public x: number;
     public y: number;
+    public type: string;
 
     constructor(type: string) {
         this.element = document.createElementNS(this.svgUrl, type);
+        this.type = type;
     }
 
     public setAttribute(name: string, value: string) {

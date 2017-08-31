@@ -1,12 +1,18 @@
+import { SvgElement } from './image/svg-element';
+
 export class GraphVertex {
     public data: any;
     public visited: boolean;
-    public neighbors: Array<GraphVertex>;
+    public neighbors: Array<GraphVertex> = [];
+    public svgElements: Array<SvgElement>;
+    public svgCoord: {"x","y"};
 
     constructor(value: any, numNeighbors: number) {
         this.data = value;
         this.visited = false;
         this.initializeNeighbors(numNeighbors);
+        this.createElement("circle");
+        this.createElement("text");
     }
 
     private initializeNeighbors(numNeighbors: number) {
@@ -15,5 +21,16 @@ export class GraphVertex {
         for(let i = 0; i < numNeighbors; i++) {
             this.neighbors.push(null);
         }
+    }
+
+    get hasNeighbors(): boolean {
+        return !this.neighbors.every(x => x.data == -1);
+    }
+
+    public createElement(type: string) {
+        if (this.svgElements == null) {
+            this.svgElements = [];
+        }
+        this.svgElements.push(new SvgElement(type));
     }
 }
