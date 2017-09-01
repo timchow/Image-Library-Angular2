@@ -6,6 +6,7 @@ export class BinarySearchTree implements IGraph {
 
     private root: GraphVertex;
     private numNeighbors = 2;
+    private levels = [];
 
     constructor() {
         this.root = null;
@@ -98,5 +99,11 @@ export class BinarySearchTree implements IGraph {
 
     public Convert() {
         return PrintUtility.ConvertToPerfectTree(this.root, this.height(), this.numNeighbors);
+    }
+
+    public getTreeLevels() {
+        this.levels = PrintUtility.GetLevelsOfTree(this.root);
+        console.log(this.levels)
+        console.log("hi")
     }
 }

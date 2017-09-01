@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { BinarySearchTree } from './binary-search-tree';
 
 @Component({
@@ -6,11 +6,11 @@ import { BinarySearchTree } from './binary-search-tree';
     templateUrl: './binary-search-tree.component.html',
     styleUrls: ['./binary-search-tree.component.css']
 })
-export class BinarySearchTreeComponent implements OnInit {
+export class BinarySearchTreeComponent implements OnInit,OnChanges {
 
     public bst: BinarySearchTree;
     constructor() {
-
+        
     }
 
     ngOnInit() {
@@ -22,17 +22,22 @@ export class BinarySearchTreeComponent implements OnInit {
         //this.bst.addVertex(26);
         //this.bst.addVertex(12);
         this.bst.addVertex(23)
-        console.log(this.bst.print())
-        this.bst.height()
-
+        this.bst.addVertex(100)
+        this.bst.addVertex(57)
+        this.bst.getTreeLevels();
+        /*
         let svg = document.getElementById("svg");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         svg.setAttribute("version", "1.1")
 
         svg = this.bst.prettyPrint(svg);
         let appImage = document.getElementsByTagName("app-binary-search-tree");
-        appImage[0].appendChild(svg);
+        appImage[0].appendChild(svg);*/
         //this.bst.Convert();
+    }
+
+    ngOnChanges() {
+        
     }
 
 }

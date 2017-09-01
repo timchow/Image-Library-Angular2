@@ -14,9 +14,21 @@ export default class PrintUtility {
     static ConvertToPerfectTree(root: GraphVertex, height: number, numNeighbors: number) {
         return _convertToPerfectTree(root, height, numNeighbors);
     }
+
+    static GetLevelsOfTree(root: GraphVertex) {
+        return _getLevelsOfTree(root);
+    }
 }
 
 // Private functions - not exposed as a part of static class ListUtility
+
+export function _getLevelsOfTree(root: GraphVertex) {
+    let height = _height(root);
+    let numNeighbors = root.neighbors.length;
+    let clonedRoot = _clone(root, height + 1);
+    let levels: Array<Array<GraphVertex>> = getLevelsOfTree(clonedRoot, height);
+    return appendLevelElementsToSVG(levels);
+}
 
 export function _prettyPrint(root: GraphVertex, svg): HTMLElement {
     let height = _height(root);
@@ -25,7 +37,7 @@ export function _prettyPrint(root: GraphVertex, svg): HTMLElement {
     let levels: Array<Array<GraphVertex>> = getLevelsOfTree(clonedRoot, height);
 
     debugger;
-    svg = appendLevelElementsToSVG(levels, svg);
+    //svg = appendLevelElementsToSVG(levels, svg);
     // Add here
 
     return svg;
@@ -50,7 +62,7 @@ export function getLevelsOfTree(root: GraphVertex, height: number): Array<Array<
 }
 
 // TODO: Make this work!
-export function appendLevelElementsToSVG(levels: Array<Array<GraphVertex>>, svg: HTMLElement): HTMLElement {
+/* export function appendLevelElementsToSVG(levels: Array<Array<GraphVertex>>, svg: HTMLElement): HTMLElement {
     let numLeaves = levels[levels.length - 1].length;
     let width = (numLeaves * 800) + 10;
     let height = levels.length * 1000;
@@ -110,12 +122,44 @@ export function appendLevelElementsToSVG(levels: Array<Array<GraphVertex>>, svg:
             }
             
         });
-        height = height - 50;
+        height = height - 25;
         idx++;
     });
 
     return svg;
+} */
+
+export function appendLevelElementsToSVG(levels: Array<Array<GraphVertex>>) {
+    let numLeaves = levels[levels.length - 1].length;
+    let width = (numLeaves * 800) + 10;
+    let height = levels.length * 1000;
+    let heightDif = 1000;
+    levels = levels.reverse();
+    let x_position = width/2;
+    let idx = 1;
+    levels.forEach(level => {
+        level.forEach(node => {
+            // leaves
+            if (idx == 1) {
+                node.svgCoord = {"x": x_position, 
+                                "y": height-100};
+                x_position += 300;
+            }
+            // inner nodes
+            else {
+                node.svgCoord = {"x": node.neighbors.map(n => n.svgCoord.x).reduce((x1, x2) => x1 + x2) / node.neighbors.length,
+                                 "y": (node.neighbors.map(n => n.svgCoord).find(n => n != null).y - heightDif)}
+            }
+            
+        });
+        height = height - 25;
+        idx++;
+    });
+
+    return levels;
 }
+
+
 
 // For tree-like structures
 export function _height(root: GraphVertex) {
