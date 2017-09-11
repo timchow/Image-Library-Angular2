@@ -1,6 +1,6 @@
 import { GraphVertex } from '../../models/graph-vertex';
 import { IGraph } from '../../interfaces/i-graph';
-import PrintUtility from '../../utility/print-utility';
+import TreeUtility from '../../utility/tree-utility';
 
 export class BinarySearchTree implements IGraph {
 
@@ -90,20 +90,29 @@ export class BinarySearchTree implements IGraph {
     }
 
     public height() {
-        return PrintUtility.height(this.root);
+        return TreeUtility.height(this.root);
     }
 
     public prettyPrint(svg): HTMLElement {
-        return PrintUtility.prettyPrint(this.root,svg);
+        return TreeUtility.prettyPrint(this.root,svg);
     }
 
     public Convert() {
-        return PrintUtility.ConvertToPerfectTree(this.root, this.height(), this.numNeighbors);
+        return TreeUtility.ConvertToPerfectTree(this.root, this.height(), this.numNeighbors);
     }
 
-    public getTreeLevels() {
-        this.levels = PrintUtility.GetLevelsOfTree(this.root);
+    public GetLevelsOfTree() {
+        return TreeUtility.GetLevelsOfTree(this.root);
+    }
+
+    public getTreeLevelsWithPositions() {
+        this.levels = this.GetLevelsOfTree();
+        TreeUtility.SetSVGPositionsForLevels(this.levels, 1300, 1000);
+
         console.log(this.levels)
-        console.log("hi")
+    }
+
+    public keyExists(key: any): boolean {
+        return TreeUtility.KeyExists(this.root, key);
     }
 }

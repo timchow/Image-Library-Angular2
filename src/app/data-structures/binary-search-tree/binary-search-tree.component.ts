@@ -6,11 +6,11 @@ import { BinarySearchTree } from './binary-search-tree';
     templateUrl: './binary-search-tree.component.html',
     styleUrls: ['./binary-search-tree.component.css']
 })
-export class BinarySearchTreeComponent implements OnInit,OnChanges {
+export class BinarySearchTreeComponent implements OnInit, OnChanges {
 
     public bst: BinarySearchTree;
     constructor() {
-        
+
     }
 
     ngOnInit() {
@@ -24,7 +24,7 @@ export class BinarySearchTreeComponent implements OnInit,OnChanges {
         this.bst.addVertex(23)
         this.bst.addVertex(100)
         this.bst.addVertex(57)
-        this.bst.getTreeLevels();
+        this.bst.getTreeLevelsWithPositions();
         /*
         let svg = document.getElementById("svg");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
@@ -37,7 +37,27 @@ export class BinarySearchTreeComponent implements OnInit,OnChanges {
     }
 
     ngOnChanges() {
-        
+        //this.bst.getTreeLevels();
+    }
+
+    handleSubmit(data, option) {
+        console.log(data)
+        console.log(option)
+
+        if (option == 1) {
+            if (data) {
+                this.bst.addVertex(parseInt(data));
+                this.bst.getTreeLevelsWithPositions()
+            }
+        }
+        else if (option == 2) {
+
+        }
+        else if (option == 3) {
+            if (data) {
+                console.log(this.bst.keyExists(data));
+            }
+        }
     }
 
 }

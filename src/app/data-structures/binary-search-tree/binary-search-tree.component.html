@@ -1,3 +1,11 @@
+<label>Value</label>
+<input #data type="text"/>
+<select #options>
+    <option value="1">Add</option>
+    <option value="2">Remove</option>
+    <option value="3">Find</option>
+</select>
+<button (click)="handleSubmit(data.value,options.value)">Submit la</button>
 <svg id="svg" width="10000px" height="10000px">
     <g *ngFor="let level of bst.levels">
         <g *ngFor="let node of level">
