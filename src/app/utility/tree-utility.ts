@@ -23,8 +23,12 @@ export default class TreeUtility {
         setSVGPositionsForLevelElements(levels, svgWidth, svgHeight)
     }
 
-    static KeyExists(root: GraphVertex, key: any) {
-        return _keyExists(root, key);
+    static KeyExists(root: GraphVertex, key: any): boolean {
+        return _findKey(root, key) != null;
+    }
+
+    static FindKey(root:GraphVertex, key: any): GraphVertex {
+        return _findKey(root, key);
     }
 }
 
@@ -159,19 +163,33 @@ export function _clone(root: GraphVertex, height, depth = 0) {
     return newRoot;
 }
 
-export function _keyExists(root: GraphVertex, key: any): boolean {
+export function _findKey(root: GraphVertex, key: any) {
     if (!root) {
-        return false;
+        return null;
     }
 
     if (root.data == key) {
-        return true;
+        return root;
     }
 
-    let exists: boolean = false;
+    let result: GraphVertex = null;
+
     root.neighbors.forEach(neighbor => {
-        exists = exists || _keyExists(neighbor, key);
+        let temp = _findKey(neighbor, key);
+        if (temp) {
+            result = temp;
+        }
     });
 
-    return exists;
+    return result;
+}
+
+export function _removeKey(root: GraphVertex, key: any): void {
+    if (!root) {
+        return;
+    }
+
+    if (root.data == key) {
+
+    }
 }

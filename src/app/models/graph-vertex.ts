@@ -23,8 +23,12 @@ export class GraphVertex {
         }
     }
 
-    get hasNeighbors(): boolean {
+    get hasNeighborsSVG(): boolean {
         return !this.neighbors.every(x => x.data == -1);
+    }
+
+    get hasNeighbors(): boolean {
+        return !this.neighbors.every(x => x == null);
     }
 
     public createElement(type: string) {

@@ -18,10 +18,10 @@ export class BinarySearchTreeComponent implements OnInit, OnChanges {
         this.bst.addVertex(16);
         this.bst.addVertex(8);
         this.bst.addVertex(24);
-        this.bst.addVertex(20);
+        //this.bst.addVertex(20);
         //this.bst.addVertex(26);
         //this.bst.addVertex(12);
-        this.bst.addVertex(23)
+        //this.bst.addVertex(23)
         this.bst.addVertex(100)
         this.bst.addVertex(57)
         this.bst.getTreeLevelsWithPositions();
@@ -41,8 +41,6 @@ export class BinarySearchTreeComponent implements OnInit, OnChanges {
     }
 
     handleSubmit(data, option) {
-        console.log(data)
-        console.log(option)
 
         if (option == 1) {
             if (data) {
@@ -51,7 +49,10 @@ export class BinarySearchTreeComponent implements OnInit, OnChanges {
             }
         }
         else if (option == 2) {
-
+            if (data) {
+                this.bst.removeVertexWithKey(data);
+                this.bst.getTreeLevelsWithPositions();
+            }
         }
         else if (option == 3) {
             if (data) {
