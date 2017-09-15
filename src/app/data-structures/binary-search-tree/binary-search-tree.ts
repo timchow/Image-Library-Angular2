@@ -17,6 +17,8 @@ export class BinarySearchTree implements IGraph {
     }
 
     public addVertex(data: any): void {
+        if (this.keyExists(Math.floor(data))) return; // Enforcing unique keys
+
         if (!this.root) this.root = new GraphVertex(data, this.numNeighbors);
 
         else {
@@ -28,9 +30,7 @@ export class BinarySearchTree implements IGraph {
 
     }
 
-    // need to finish
     public removeVertexWithKey(key: any): void {
-        debugger;
         let nodeToRemove = this.findVertex(key);
         let parent = this.findParentOfGivenKey(this.root, nodeToRemove.data);
 
@@ -55,8 +55,6 @@ export class BinarySearchTree implements IGraph {
                     parent.neighbors[1] = null;
                         nodeToRemove = null;
                 }
-                        
-
             }
             // 1 child - right child present
             else if ((nodeToRemove.neighbors[0] == null && nodeToRemove.neighbors[1] != null)) {

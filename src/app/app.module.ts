@@ -9,6 +9,7 @@ import { ImageComponent } from './models/image/image.component';
 import { QueueComponent } from './models/queue/queue.component';
 import { QuadtreeComponent } from './models/quadtree/quadtree.component';
 import { BinarySearchTreeComponent } from './data-structures/binary-search-tree/binary-search-tree.component';
+import { HeapComponent } from './data-structures/heap/heap.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { BinarySearchTreeComponent } from './data-structures/binary-search-tree/
         ImageComponent,
         QueueComponent,
         QuadtreeComponent,
-        BinarySearchTreeComponent
+        BinarySearchTreeComponent,
+        HeapComponent
     ],
     imports: [
         BrowserModule
