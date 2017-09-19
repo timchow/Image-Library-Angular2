@@ -63,13 +63,11 @@ export class Heap {
             if (this.type == HeapType.MIN) {
                 if (root.data > neighbor.data) {
                     this.swapData(root, neighbor);
-                    break;
                 }
             }
             else if (this.type == HeapType.MAX) {
                 if (root.data < neighbor.data) {
                     this.swapData(root, neighbor);
-                    break;
                 }
             }
 
@@ -88,6 +86,38 @@ export class Heap {
     }
 
     public getLevels() {
+
+    }
+
+    public extractRoot(): GraphVertex {
+        return this._extractRoot(this.root, this.heapArray);
+    }
+
+    private _extractRoot(root: GraphVertex, heapArray: Array<GraphVertex>): GraphVertex {
+        // Case: no elements
+        if (heapArray.length == 1) return null;
+
+        // Case: 1 element
+        else if (heapArray.length == 2) {
+            root = null;
+            return heapArray.pop();
+        }
+
+        // Case: More than 1 element
+        else {
+            let lastElement = heapArray[heapArray.length - 1];
+            this.swapData(root, lastElement);
+
+            let rootElement = heapArray.pop();
+
+            for (let i = 1; i < Math.floor(heapArray.length / 2); i++) {
+                let current = heapArray[i];
+
+                this.heapify(current);
+            }
+
+            return rootElement;
+        }
 
     }
 

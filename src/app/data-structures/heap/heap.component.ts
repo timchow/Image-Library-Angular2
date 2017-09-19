@@ -13,14 +13,20 @@ export class HeapComponent implements OnInit {
 
     constructor() {
         this.heap = new Heap(HeapType.MAX);
-        debugger;
+
         this.heap.insert(5);
         this.heap.insert(3);
-        this.heap.insert(15);
+        this.heap.insert(12);
         this.heap.insert(10);
         this.heap.insert(50);
         this.heap.insert(43);
         this.heap.insert(2);
+        console.log(this.heap.getHeapArray());
+        console.log(this.heap.getHeapTree());
+
+        console.log("Extract root: ");
+        console.log(this.heap.extractRoot());
+
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree());
     }
