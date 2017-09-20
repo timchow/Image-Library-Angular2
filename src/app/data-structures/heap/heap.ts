@@ -128,4 +128,25 @@ export class Heap {
     public getHeapTree() {
         return this.root;
     }
+
+    public heapSort() {
+        this._heapSort(this.root, this.heapArray);
+    }
+
+    private _heapSort(root: GraphVertex, heapArray: Array<GraphVertex>) {
+        if (heapArray.length < 3) {
+            return;
+        }
+        else {
+            let sortedHeap: Array<GraphVertex> = [];
+
+            while (!this.isEmpty()) {
+                sortedHeap.push(this.extractRoot());
+            }
+
+            this.heapArray = sortedHeap;
+            this.heapArray.unshift(new GraphVertex(-1, this.numNeighbors));
+            this.buildHeap(this.root,this.heapArray);
+        }
+    }
 }

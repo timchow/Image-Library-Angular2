@@ -24,11 +24,14 @@ export class HeapComponent implements OnInit {
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree());
 
-        console.log("Extract root: ");
-        console.log(this.heap.extractRoot());
-
+        this.heap.heapSort();
         console.log(this.heap.getHeapArray());
-        console.log(this.heap.getHeapTree());
+        console.log(this.heap.getHeapTree())
+        //console.log("Extract root: ");
+        //console.log(this.heap.extractRoot());
+
+        //console.log(this.heap.getHeapArray());
+        //console.log(this.heap.getHeapTree());
     }
 
     ngOnInit() {
