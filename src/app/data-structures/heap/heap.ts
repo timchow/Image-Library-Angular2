@@ -26,19 +26,16 @@ export class Heap {
 
     public insert(data: any) {
         this._insert(this.heapArray, data);
-
     }
 
     private _insert(heap: Array<GraphVertex>, data: any) {
         this.heapArray.push(new GraphVertex(data, this.numNeighbors));
-        this.buildHeap(this.root, this.heapArray);
+        this.root = this.buildHeap(this.root, this.heapArray);
+
     }
 
     private buildHeap(root: GraphVertex, heap: Array<GraphVertex>) {
-        if (heap.length == 2) {
-            this.root = this.heapArray[1];
-        }
-        else if (heap.length > 2) {
+        if (heap.length > 2) {
             for (let j = Math.ceil(heap.length / 2) - 1; j > 0; j--) {
                 let current = heap[j];
 
@@ -55,6 +52,8 @@ export class Heap {
                 this.heapify(heap[j]);
             }
         }
+        root = heap[1];
+        return root;
     }
 
     private heapify(root: GraphVertex) {
@@ -70,7 +69,6 @@ export class Heap {
                     this.swapData(root, neighbor);
                 }
             }
-
         }
     }
 
@@ -130,7 +128,10 @@ export class Heap {
     }
 
     public heapSort() {
-        this._heapSort(this.root, this.heapArray);
+        let sortedHeap = this._heapSort(this.root, this.heapArray);
+
+        this.root = sortedHeap["root"];
+        this.heapArray = sortedHeap["heapArray"];
     }
 
     private _heapSort(root: GraphVertex, heapArray: Array<GraphVertex>) {
@@ -144,9 +145,11 @@ export class Heap {
                 sortedHeap.push(this.extractRoot());
             }
 
-            this.heapArray = sortedHeap;
-            this.heapArray.unshift(new GraphVertex(-1, this.numNeighbors));
-            this.buildHeap(this.root,this.heapArray);
+            heapArray = sortedHeap;
+            heapArray.unshift(new GraphVertex(-1, this.numNeighbors));
+            root = this.buildHeap(root,heapArray);
+
+            return { "root": root, "heapArray": heapArray };
         }
     }
 }

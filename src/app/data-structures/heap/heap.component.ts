@@ -24,6 +24,7 @@ export class HeapComponent implements OnInit {
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree());
 
+        debugger;
         this.heap.heapSort();
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree())
