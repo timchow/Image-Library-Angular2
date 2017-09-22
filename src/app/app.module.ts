@@ -10,6 +10,7 @@ import { QueueComponent } from './models/queue/queue.component';
 import { QuadtreeComponent } from './models/quadtree/quadtree.component';
 import { BinarySearchTreeComponent } from './data-structures/binary-search-tree/binary-search-tree.component';
 import { HeapComponent } from './data-structures/heap/heap.component';
+import { PriorityQueueComponent } from './models/priority-queue/priority-queue.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { HeapComponent } from './data-structures/heap/heap.component';
         QueueComponent,
         QuadtreeComponent,
         BinarySearchTreeComponent,
-        HeapComponent
+        HeapComponent,
+        PriorityQueueComponent
     ],
     imports: [
         BrowserModule

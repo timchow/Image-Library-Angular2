@@ -12,7 +12,7 @@ export class HeapComponent implements OnInit {
     private heap: Heap;
 
     constructor() {
-        this.heap = new Heap(HeapType.MAX);
+        this.heap = new Heap(HeapType.MIN);
 
         this.heap.insert(5);
         this.heap.insert(3);
@@ -21,10 +21,11 @@ export class HeapComponent implements OnInit {
         this.heap.insert(50);
         this.heap.insert(43);
         this.heap.insert(2);
+
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree());
 
-        debugger;
+
         this.heap.heapSort();
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree())

@@ -31,7 +31,6 @@ export class Heap {
     private _insert(heap: Array<GraphVertex>, data: any) {
         this.heapArray.push(new GraphVertex(data, this.numNeighbors));
         this.root = this.buildHeap(this.root, this.heapArray);
-
     }
 
     private buildHeap(root: GraphVertex, heap: Array<GraphVertex>) {
