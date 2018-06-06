@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Heap } from './heap';
 import { HeapType } from './enum-heap-type';
+import TreeUtility from '../../utility/tree-utility';
 
 @Component({
     selector: 'app-heap',
@@ -25,15 +26,10 @@ export class HeapComponent implements OnInit {
         console.log(this.heap.getHeapArray());
         console.log(this.heap.getHeapTree());
 
-
-        this.heap.heapSort();
-        console.log(this.heap.getHeapArray());
-        console.log(this.heap.getHeapTree())
-        //console.log("Extract root: ");
-        //console.log(this.heap.extractRoot());
-
+		//TreeUtility.prettyPrint(this.heap.getHeapTree());
+        //this.heap.heapSort();
         //console.log(this.heap.getHeapArray());
-        //console.log(this.heap.getHeapTree());
+        //console.log(this.heap.getHeapTree())
     }
 
     ngOnInit() {

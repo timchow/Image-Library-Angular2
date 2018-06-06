@@ -62,7 +62,7 @@ export class List {
         output = ListUtility.GetList(cursor,reverse);
     }
 
-    public getList(reverse: boolean = false): Array<any> {
+    public getList(reverse: boolean = false): any[] {
         let output,
             cursor = reverse ? this.tail : this.head;
         return ListUtility.GetList(cursor,reverse);   

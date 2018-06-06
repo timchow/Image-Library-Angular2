@@ -5,14 +5,13 @@ import { SvgElement } from '../image/svg-element';
 import { Queue } from '../queue/queue';
 
 export class Quadtree {
-    public root: QuadtreeNode<RgbaPixel>;
+    public root: QuadtreeNode < RgbaPixel > ;
     public resolution: number;
 
     constructor(otherQuadtree: Quadtree = null) {
         if (otherQuadtree == null) {
             this.root = null;
-        }
-        else {
+        } else {
             this.root = otherQuadtree.root;
             this.resolution = otherQuadtree.resolution;
         }
@@ -20,7 +19,7 @@ export class Quadtree {
 
     public buildTree(image: Photo, resolution: number): void {
         this.resolution = resolution;
-        this.root = new QuadtreeNode<RgbaPixel>();
+        this.root = new QuadtreeNode < RgbaPixel > ();
         this.root.nwChild = this._buildTree(this.root.nwChild, image, Math.log2(resolution) - 1, resolution / 2, 1, 1);
         this.root.neChild = this._buildTree(this.root.neChild, image, Math.log2(resolution) - 1, resolution / 2, 1 + resolution / 2, 1);
         this.root.swChild = this._buildTree(this.root.swChild, image, Math.log2(resolution) - 1, resolution / 2, 1, 1 + resolution / 2);
@@ -33,18 +32,17 @@ export class Quadtree {
         this.root.data = this.averageColor(this.root.nwChild, this.root.neChild, this.root.swChild, this.root.seChild);
     }
 
-    private _buildTree(root: QuadtreeNode<RgbaPixel>, image: Photo, offset: number, res: number, x: number, y: number): QuadtreeNode<RgbaPixel> {
+    private _buildTree(root: QuadtreeNode < RgbaPixel > , image: Photo, offset: number, res: number, x: number, y: number): QuadtreeNode < RgbaPixel > {
         if (res == 1) {
-            root = new QuadtreeNode<RgbaPixel>(image.getPixel(x - 1, y - 1));
+            root = new QuadtreeNode < RgbaPixel > (image.getPixel(x - 1, y - 1));
             root.mapped_x = x - 1;
             root.mapped_y = y - 1;
             root.min_children_x = x - 1;
             root.max_children_x = x - 1;
             root.min_children_y = y - 1;
             root.max_children_y = y - 1
-        }
-        else {
-            root = new QuadtreeNode<RgbaPixel>();
+        } else {
+            root = new QuadtreeNode < RgbaPixel > ();
 
             root.nwChild = this._buildTree(root.nwChild, image, offset - 1, res / 2, x, y);
             root.neChild = this._buildTree(root.neChild, image, offset - 1, res / 2, x + Math.pow(2, offset - 1), y);
@@ -66,12 +64,11 @@ export class Quadtree {
         this.root = this._prune(this.root, tolerance);
     }
 
-    private _prune(root: QuadtreeNode<RgbaPixel>, tolerance: number): QuadtreeNode<RgbaPixel> {
+    private _prune(root: QuadtreeNode < RgbaPixel > , tolerance: number): QuadtreeNode < RgbaPixel > {
         if (this.shouldPrune(root, root, tolerance)) {
-                root = this.clearChildren(root);
-                root.isActive = false;
-        }
-        else {
+            root = this.clearChildren(root);
+            root.isActive = false;
+        } else {
             root.neChild = this._prune(root.neChild, tolerance);
             root.nwChild = this._prune(root.nwChild, tolerance);
             root.seChild = this._prune(root.seChild, tolerance);
@@ -81,7 +78,7 @@ export class Quadtree {
         return root;
     }
 
-    private shouldPrune(root: QuadtreeNode<RgbaPixel>, cursor: QuadtreeNode<RgbaPixel>, tolerance: number): boolean {
+    private shouldPrune(root: QuadtreeNode < RgbaPixel > , cursor: QuadtreeNode < RgbaPixel > , tolerance: number): boolean {
         if (cursor == null) {
             return true;
         }
@@ -93,7 +90,7 @@ export class Quadtree {
             this.shouldPrune(root, cursor.swChild, tolerance);
     }
 
-    private clearChildren(root: QuadtreeNode<RgbaPixel>): QuadtreeNode<RgbaPixel> {
+    private clearChildren(root: QuadtreeNode < RgbaPixel > ): QuadtreeNode < RgbaPixel > {
         //root.neChild = null;
         //root.nwChild = null;
         //root.seChild = null;
@@ -106,7 +103,7 @@ export class Quadtree {
         return root;
     }
 
-    private convertQuadtreeTo2DPixels(root: QuadtreeNode<RgbaPixel>, pixels: RgbaPixel[][], ctx: CanvasRenderingContext2D): void {
+    private convertQuadtreeTo2DPixels(root: QuadtreeNode < RgbaPixel > , pixels: RgbaPixel[][], ctx: CanvasRenderingContext2D): void {
         if (!root) return;
 
         // at a leaf
@@ -117,8 +114,7 @@ export class Quadtree {
                                         ${Math.floor(pixel.green)},
                                         ${Math.floor(pixel.blue)})`;
                 ctx.fillRect(root.mapped_x, root.mapped_y, 1, 1);
-            }
-            else if (root.min_children_x) {
+            } else if (root.min_children_x) {
                 pixel = root.data;
                 ctx.fillStyle = ctx.strokeStyle = `rgb(${Math.floor(pixel.red)},${Math.floor(pixel.green)},${Math.floor(pixel.blue)})`;
                 ctx.lineWidth = 5;
@@ -176,27 +172,27 @@ export class Quadtree {
         return;
     }*/
 
-    public averageColor(...nodes: QuadtreeNode<RgbaPixel>[]): RgbaPixel {
+    public averageColor(...nodes: QuadtreeNode < RgbaPixel > []): RgbaPixel {
         let totalRed: number = 0,
             totalGreen: number = 0,
             totalBlue: number = 0;
 
         nodes.forEach(element => {
-            totalRed += (<RgbaPixel>element.data).red;
-            totalGreen += (<RgbaPixel>element.data).green;
-            totalBlue += (<RgbaPixel>element.data).blue;
+            totalRed += ( < RgbaPixel > element.data).red;
+            totalGreen += ( < RgbaPixel > element.data).green;
+            totalBlue += ( < RgbaPixel > element.data).blue;
         });
 
         return new RgbaPixel(totalRed / nodes.length, totalGreen / nodes.length, totalBlue / nodes.length);
     }
 
-    public colorDifference(a: QuadtreeNode<RgbaPixel>, b: QuadtreeNode<RgbaPixel>): number {
+    public colorDifference(a: QuadtreeNode < RgbaPixel > , b: QuadtreeNode < RgbaPixel > ): number {
         return Math.pow(a.data.red - b.data.red, 2) +
             Math.pow(a.data.green - b.data.green, 2) +
             Math.pow(a.data.blue - b.data.blue, 2);
     }
 
-    public colorMap(root: QuadtreeNode<RgbaPixel>, cursor: QuadtreeNode<RgbaPixel>) {
+    public colorMap(root: QuadtreeNode < RgbaPixel > , cursor: QuadtreeNode < RgbaPixel > ) {
         if (!cursor.neChild) {
             cursor.data = root.data;
             return;
@@ -212,15 +208,15 @@ export class Quadtree {
         return Math.log2(this.resolution);
     }
 
-    private getLevelsOfQuadTree(): Array<Array<QuadtreeNode<RgbaPixel>>> {
-        let levels: Array<Array<QuadtreeNode<RgbaPixel>>> = [];
-        let level: Array<QuadtreeNode<RgbaPixel>> = [this.root];
+    private getLevelsOfQuadTree(): QuadtreeNode < RgbaPixel > [][] {
+        let levels: QuadtreeNode < RgbaPixel > [][] = [];
+        let level: QuadtreeNode < RgbaPixel > [] = [this.root];
         levels.push(level);
 
         for (let idx = 0; idx < this.getQuadTreeHeight(); idx++) {
             let item = levels[idx];
             level = [];
-            item.forEach((node: QuadtreeNode<RgbaPixel>) => {
+            item.forEach((node: QuadtreeNode < RgbaPixel > ) => {
                 if (node.nwChild) {
                     level.push(node.nwChild);
                 }
@@ -239,7 +235,7 @@ export class Quadtree {
         return levels;
     }
 
-    private appendLevelElementsToSVG(levels: Array<Array<QuadtreeNode<RgbaPixel>>>, svg: HTMLElement): HTMLElement {
+    private appendLevelElementsToSVG(levels: QuadtreeNode < RgbaPixel > [][], svg: HTMLElement): HTMLElement {
         let numLeaves = levels[levels.length - 1].length;
         let width = (numLeaves * 60) + 10;
         let height = this.getQuadTreeHeight() * 1000;
@@ -255,8 +251,7 @@ export class Quadtree {
                     node.svgElement.x = x_position;
                     node.svgElement.y = height - 10;
                     x_position += 50;
-                }
-                else {
+                } else {
                     node.svgElement.x = (node.neChild.svgElement.x + node.nwChild.svgElement.x + node.swChild.svgElement.x + node.seChild.svgElement.x) / 4;
                     node.svgElement.y = (node.neChild.svgElement.y - heightDif);
                 }
@@ -266,7 +261,7 @@ export class Quadtree {
                 }
 
                 if (node.nwChild) {
-                    
+
                     let nwLine = new SvgElement("line");
 
                     nwLine.setAttribute("x1", node.nwChild.svgElement.x.toString());
@@ -328,7 +323,7 @@ export class Quadtree {
     }
 
     public prettyPrint(): void {
-        let levels: Array<Array<QuadtreeNode<RgbaPixel>>> = this.getLevelsOfQuadTree();
+        let levels: QuadtreeNode < RgbaPixel > [][] = this.getLevelsOfQuadTree();
 
         let svg = document.getElementById("svg");
         svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
@@ -338,10 +333,9 @@ export class Quadtree {
         let appImage = document.getElementsByTagName("app-image");
         appImage[0].appendChild(svg);
 
-        debugger;
     }
 
-    private fillQueue(root: QuadtreeNode<RgbaPixel>, q: Queue): void {
+    private fillQueue(root: QuadtreeNode < RgbaPixel > , q: Queue): void {
         if (!root.neChild) return;
 
 

@@ -3,7 +3,7 @@ import { IGraph } from '../interfaces/i-graph';
 import { SvgElement } from '../models/image/svg-element';
 
 export default class TreeUtility {
-    static prettyPrint(root: GraphVertex, svg): HTMLElement {
+    static prettyPrint(root: GraphVertex, svg): {"levels","width","height"} {
         return _prettyPrint(root, svg);
     }
 
@@ -19,7 +19,7 @@ export default class TreeUtility {
         return _getLevelsOfTree(root);
     }
 
-    static SetSVGPositionsForLevels(levels: Array<Array<GraphVertex>>, svgWidth: number, svgHeight: number) {
+    static SetSVGPositionsForLevels(levels: GraphVertex[][], svgWidth: number, svgHeight: number) {
         setSVGPositionsForLevelElements(levels, svgWidth, svgHeight)
     }
 
@@ -35,29 +35,33 @@ export default class TreeUtility {
 // Private functions - not exposed as a part of static class ListUtility
 
 export function _getLevelsOfTree(root: GraphVertex) {
-    let height = _height(root);
-    let numNeighbors = root.neighbors.length;
-    let clonedRoot = _clone(root, height + 1);
-    let levels: Array<Array<GraphVertex>> = getLevelsOfTree(clonedRoot, height);
+	let height = _height(root),
+		numNeighbors = root.neighbors.length,
+		clonedRoot = _clone(root, height + 1),
+		levels: GraphVertex[][] = getLevelsOfTree(clonedRoot, height);
+
     return levels;
 }
 
-export function _prettyPrint(root: GraphVertex, svg): HTMLElement {
-    let height = _height(root);
-    let numNeighbors = root.neighbors.length;
-    let clonedRoot = _clone(root, height + 1);
-    let levels: Array<Array<GraphVertex>> = getLevelsOfTree(clonedRoot, height);
+export function _prettyPrint(root: GraphVertex, svg: HTMLElement): {"levels","width","height"} {
+	let height = _height(root),
+		numNeighbors = root.neighbors.length,
+		clonedRoot = _clone(root, height + 1),
+		levels: GraphVertex[][] = getLevelsOfTree(clonedRoot, height);
 
-    debugger;
-    //svg = appendLevelElementsToSVG(levels, svg);
-    // Add here
+	let obj = setSVGPositionsForLevelElements(levels,svg.clientWidth,svg.clientHeight);
+	levels = obj.levels;
 
-    return svg;
+    return {
+		levels: levels,
+		width: obj.width+(obj.width/2),
+		height: obj.height+(100)
+	};
 }
 
-export function getLevelsOfTree(root: GraphVertex, height: number): Array<Array<GraphVertex>> {
-    let levels: Array<Array<GraphVertex>> = [];
-    let level: Array<GraphVertex> = [root];
+export function getLevelsOfTree(root: GraphVertex, height: number): GraphVertex[][] {
+	let levels: GraphVertex[][] = [],
+		level: GraphVertex[] = [root];
 
     levels.push(level);
     for (let idx = 0; idx < height - 1; idx++) {
@@ -69,19 +73,24 @@ export function getLevelsOfTree(root: GraphVertex, height: number): Array<Array<
             })
         });
         levels.push(level);
-    }
+	}
+	
     return levels;
 }
 
-export function setSVGPositionsForLevelElements(levels: Array<Array<GraphVertex>>, svgWidth: number, svgHeight: number) {
-    let width = svgWidth; // width of svg
-    let height = svgHeight; // height of svg
-    let numLeaves = levels[levels.length - 1].length;
-    let horizontalSpaceBetweenLeaves = width / numLeaves;
-    let verticalDistanceBetweenNodes = height / levels.length;
+// Refactor the name
+export function setSVGPositionsForLevelElements(levels: GraphVertex[][], svgWidth: number, svgHeight: number) {
+
+	let numLeaves = levels[levels.length - 1].length,
+		horizontalSpaceBetweenLeaves = 150,
+		verticalDistanceBetweenNodes = 100,
+		width = horizontalSpaceBetweenLeaves * numLeaves,
+		height = verticalDistanceBetweenNodes * levels.length;
+
     levels = levels.reverse();
-    let x_position = width / 2;
-    let idx = 1;
+	let x_position = width / 2,
+	idx = 1;
+
     levels.forEach(level => {
         level.forEach(node => {
             // leaves
@@ -105,7 +114,11 @@ export function setSVGPositionsForLevelElements(levels: Array<Array<GraphVertex>
         idx++;
     });
 
-    return levels;
+    return {
+		levels: levels,
+		width: width,
+		height: height
+	}
 }
 
 // finds the height of a tree with k children, where k is a positive integer
@@ -123,12 +136,13 @@ export function _height(root: GraphVertex) {
 }
 
 export function _convertToPerfectTree(root: GraphVertex, height: number, numNeighbors: number, depth = 0): GraphVertex {
-    let clonedRoot = _clone(root, height + 1);
-    let levels: Array<Array<GraphVertex>> = [];
-    let level: Array<GraphVertex> = [clonedRoot];
+	let clonedRoot = _clone(root, height + 1),
+		levels: GraphVertex[][] = [],
+		level: GraphVertex[] = [clonedRoot];
     levels.push(level);
     let idx = 0;
-    while (idx < height) {
+	
+	while (idx < height) {
         level = levels[idx];
         let newLevel = [];
 
@@ -141,7 +155,8 @@ export function _convertToPerfectTree(root: GraphVertex, height: number, numNeig
         });
         levels.push(newLevel);
         idx++;
-    };
+	};
+	
     return clonedRoot;
 }
 
@@ -151,10 +166,9 @@ export function _clone(root: GraphVertex, height, depth = 0) {
         return null;
     }
 
-    let data = root ? root.data : -1;
-
-    let numNeighbors = root ? root.neighbors.length : 2/*handle this later*/;
-    let newRoot = new GraphVertex(data, numNeighbors);
+	let data = root ? root.data : -1,
+		numNeighbors = root ? root.neighbors.length : 2/*handle this later*/,
+		newRoot = new GraphVertex(data, numNeighbors);
 
     for (let idx = 0; idx < numNeighbors; idx++) {
         newRoot.neighbors[idx] = _clone(root ? root.neighbors[idx] : null, height, depth + 1);

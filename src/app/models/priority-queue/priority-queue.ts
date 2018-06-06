@@ -13,7 +13,7 @@ export class PriorityQueue {
     }
 
     public clear(): void {
-        while(!this.heap.isEmpty()) {
+        while (!this.heap.isEmpty()) {
             this.heap.extractRoot();
         }
     }
@@ -31,6 +31,6 @@ export class PriorityQueue {
     }
 
     public size(): any {
-        return this.heap.getHeapArray().length-1;
+        return this.heap.getHeapArray().length - 1;
     }
 }

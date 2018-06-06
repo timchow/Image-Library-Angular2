@@ -2,7 +2,7 @@ import { List } from './list';
 import { ListNode } from './list-node';
 
 export default class ListUtility {
-    static GetList(head: ListNode, reverse: boolean = false): Array<any> {
+    static GetList(head: ListNode, reverse: boolean = false): any[] {
         return _getListItems(head, reverse);
     }
 
@@ -19,17 +19,17 @@ export default class ListUtility {
     }
 
     static Merge(head1: ListNode, head2: ListNode): ListNode {
-        return _merge(head1,head2);
+        return _merge(head1, head2);
     }
 
     static Mergesort(start: ListNode, chainLength: number): ListNode {
-        return _mergesort(start,chainLength);
+        return _mergesort(start, chainLength);
     }
 }
 
 // Private functions - not exposed as a part of static class ListUtility
 
-export function _getListItems(cursor: ListNode, reverse: boolean = false): Array<any> {
+export function _getListItems(cursor: ListNode, reverse: boolean = false): any[] {
     if (cursor == null) {
         return [];
     }
@@ -49,8 +49,7 @@ export function _getSize(head: ListNode): number {
 
 export function _reverse(head: ListNode): { "head", "tail" } {
     let length = ListUtility.GetSize(head);
-    if (length < 1) { return; }
-    else if (length == 1) { return { "head": head, "tail": head }; }
+    if (length < 1) { return; } else if (length == 1) { return { "head": head, "tail": head }; }
 
     let cursor: ListNode = head,
         originalhead: ListNode = head,
@@ -75,7 +74,8 @@ export function _reverse(head: ListNode): { "head", "tail" } {
 export function _waterfall(head: ListNode, tail: ListNode): { "head", "tail" } {
     if (ListUtility.GetSize(head) < 2) return;
 
-    let cursor: ListNode = head, newHead: ListNode = head;
+    let cursor: ListNode = head,
+        newHead: ListNode = head;
     let newTail: ListNode,
         node: ListNode,
         shadowCursor: ListNode,
@@ -132,8 +132,7 @@ export function _merge(head1: ListNode, head2: ListNode): ListNode {
 
         if (firstCompare) {
             mergedHead = mergedCursor = temp;
-        }
-        else {
+        } else {
             mergedCursor.next = temp;
             temp.prev = mergedCursor;
         }
@@ -146,12 +145,9 @@ export function _merge(head1: ListNode, head2: ListNode): ListNode {
     }
 
     if (list1Cursor == null) {
-        if (!mergedHead) { mergedHead = list2Cursor; }
-        else { mergedCursor.next = list2Cursor; }
-    }
-    else if (list2Cursor == null) {
-        if (!mergedHead) { mergedHead = list1Cursor; }
-        else { mergedCursor.next = list1Cursor; }
+        if (!mergedHead) { mergedHead = list2Cursor; } else { mergedCursor.next = list2Cursor; }
+    } else if (list2Cursor == null) {
+        if (!mergedHead) { mergedHead = list1Cursor; } else { mergedCursor.next = list1Cursor; }
     }
 
     return mergedHead;

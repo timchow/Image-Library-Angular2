@@ -10,9 +10,13 @@ export class BinarySearchTree implements IGraph {
 
     constructor() {
         this.root = null;
-    }
+	}
+	
+	public GetRoot() {
+		return this.root;
+	}
 
-    public neighbors(v: GraphVertex): Array<GraphVertex> {
+    public neighbors(v: GraphVertex): GraphVertex[] {
         return null;
     }
 
@@ -202,8 +206,10 @@ export class BinarySearchTree implements IGraph {
     }
 
     public prettyPrint(svg): HTMLElement {
-        return TreeUtility.prettyPrint(this.root, svg);
-    }
+        //return TreeUtility.prettyPrint(this.root, svg);
+		return null;
+	}
+
 
     public Convert() {
         return TreeUtility.ConvertToPerfectTree(this.root, this.height(), this.numNeighbors);

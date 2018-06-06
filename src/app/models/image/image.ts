@@ -73,7 +73,7 @@ export class Photo {
         if (emptyCanvas == null) {
             emptyCanvas = this.ctx.canvas;
         }
-        debugger;
+
         emptyCanvas.height = this.height;
         emptyCanvas.width = this.width;
 

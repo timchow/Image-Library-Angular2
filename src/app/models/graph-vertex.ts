@@ -3,8 +3,8 @@ import { SvgElement } from './image/svg-element';
 export class GraphVertex {
     public data: any;
     public visited: boolean;
-    public neighbors: Array<GraphVertex> = [];
-    public svgElements: Array<SvgElement>;
+    public neighbors: GraphVertex[] = [];
+    public svgElements: SvgElement[];
     public svgCoord: {"x","y"};
 
     constructor(value: any, numNeighbors: number) {

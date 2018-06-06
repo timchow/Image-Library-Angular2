@@ -4,14 +4,14 @@ import TreeUtility from '../../utility/tree-utility';
 import { HeapType } from './enum-heap-type';
 
 export class Heap {
-    private heapArray: Array<GraphVertex> = [];
+    private heapArray: GraphVertex[] = [];
     private numNeighbors = 2;
     private levels = [];
     private type: HeapType // Can be MIN or MAX
     private root: GraphVertex;
 
-    constructor(type: HeapType) {
-        this.type = type;
+    constructor(type: HeapType = null) {
+        this.type = type || HeapType.MAX;
         this.root = null;
         this.heapArray.push(new GraphVertex(-1, this.numNeighbors));
     }
@@ -28,12 +28,12 @@ export class Heap {
         this._insert(this.heapArray, data);
     }
 
-    private _insert(heap: Array<GraphVertex>, data: any) {
+    private _insert(heap: GraphVertex[], data: any) {
         this.heapArray.push(new GraphVertex(data, this.numNeighbors));
         this.root = this.buildHeap(this.root, this.heapArray);
     }
 
-    private buildHeap(root: GraphVertex, heap: Array<GraphVertex>) {
+    private buildHeap(root: GraphVertex, heap: GraphVertex[]) {
         if (heap.length > 2) {
             for (let j = Math.ceil(heap.length / 2) - 1; j > 0; j--) {
                 let current = heap[j];
@@ -51,19 +51,20 @@ export class Heap {
                 this.heapify(heap[j]);
             }
         }
-        root = heap[1];
+		root = heap[1];
+		
         return root;
     }
 
     private heapify(root: GraphVertex) {
         for (let neighbor of root.neighbors) {
-            if (neighbor == null) continue;
+			if (neighbor == null) continue;
+			
             if (this.type == HeapType.MIN) {
                 if (root.data > neighbor.data) {
                     this.swapData(root, neighbor);
                 }
-            }
-            else if (this.type == HeapType.MAX) {
+            } else if (this.type == HeapType.MAX) {
                 if (root.data < neighbor.data) {
                     this.swapData(root, neighbor);
                 }
@@ -90,7 +91,7 @@ export class Heap {
         return this._extractRoot(this.root, this.heapArray);
     }
 
-    private _extractRoot(root: GraphVertex, heapArray: Array<GraphVertex>): GraphVertex {
+    private _extractRoot(root: GraphVertex, heapArray: GraphVertex[]): GraphVertex {
         // Case: no elements
         if (heapArray.length == 1) return null;
 
@@ -116,7 +117,13 @@ export class Heap {
             return rootElement;
         }
 
-    }
+	}
+	
+	public RandomPopulate() {
+		for (let idx = 0; idx < 10; idx++) {
+			this.insert(Math.floor(Math.random() * 100) + 1);  
+		}
+	}
 
     public getHeapArray() {
         return this.heapArray;
@@ -133,12 +140,11 @@ export class Heap {
         this.heapArray = sortedHeap["heapArray"];
     }
 
-    private _heapSort(root: GraphVertex, heapArray: Array<GraphVertex>) {
+    private _heapSort(root: GraphVertex, heapArray: GraphVertex[]) {
         if (heapArray.length < 3) {
             return;
-        }
-        else {
-            let sortedHeap: Array<GraphVertex> = [];
+        } else {
+            let sortedHeap: GraphVertex[] = [];
 
             while (!this.isEmpty()) {
                 sortedHeap.push(this.extractRoot());
@@ -146,7 +152,7 @@ export class Heap {
 
             heapArray = sortedHeap;
             heapArray.unshift(new GraphVertex(-1, this.numNeighbors));
-            root = this.buildHeap(root,heapArray);
+            root = this.buildHeap(root, heapArray);
 
             return { "root": root, "heapArray": heapArray };
         }
