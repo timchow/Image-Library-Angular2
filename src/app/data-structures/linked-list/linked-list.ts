@@ -2,13 +2,13 @@ import ListUtility from './list-utility';
 import { ListNode } from './list-node';
 
 
-export class List {
+export class LinkedList {
 
     private head: ListNode;
     private tail: ListNode;
     private length: number;
 
-    constructor(otherList: List = null) {
+    constructor(otherList: LinkedList = null) {
         if (otherList == null) {
             this.head = null;
             this.length = 0;

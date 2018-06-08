@@ -1,8 +1,8 @@
 import { QuadtreeNode } from './quadtree-node';
-import { Photo } from '../image/image';
-import { RgbaPixel } from '../image/rgba-pixel';
-import { SvgElement } from '../image/svg-element';
-import { Queue } from '../queue/queue';
+import { Photo } from '../../models/image/image';
+import { RgbaPixel } from '../../models/image/rgba-pixel';
+import { SvgElement } from '../../models/image/svg-element';
+import { Queue } from '../../abstract-data-types/queue/queue';
 
 export class Quadtree {
     public root: QuadtreeNode<RgbaPixel> ;

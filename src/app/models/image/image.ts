@@ -1,8 +1,8 @@
 import { RgbaPixel } from './rgba-pixel';
 import { RgbaPixelNode } from './rgba-pixel-node';
-import { Stack } from '../stack/stack';
-import { Queue } from '../queue/queue';
-import { IBagStructure } from '../i-bag-structure';
+import { Stack } from '../../abstract-data-types/stack/stack';
+import { Queue } from '../../abstract-data-types/queue/queue';
+import { IBagStructure } from '../../interfaces/i-bag-structure';
 
 export class Photo {
     public pixels: RgbaPixelNode[][];

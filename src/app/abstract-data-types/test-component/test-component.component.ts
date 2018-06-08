@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RgbaPixel } from '../image/rgba-pixel';
-import { Photo } from '../image/image';
-import { List } from '../linked-list/list';
+import { RgbaPixel } from '../../models/image/rgba-pixel';
+import { Photo } from '../../models/image/image';
+import { LinkedList } from '../../data-structures/linked-list/linked-list';
 
 @Component({
 	selector: 'app-test-component',
@@ -12,10 +12,10 @@ export class TestComponentComponent implements OnInit {
 
 	public pixel: RgbaPixel;
 	public image: Photo;
-	public list: List;
+	public list: LinkedList;
 
 	constructor() {
-		this.list = new List();
+		this.list = new LinkedList();
 		//this.test_insertFront();
 		//this.test_insertBack();
 		//this.test_reverse();
@@ -28,7 +28,7 @@ export class TestComponentComponent implements OnInit {
 	test_waterfall() {
 		console.log("-- TESING REVERSENTH METHOD --");
 
-		let list = new List();
+		let list = new LinkedList();
 		let NUM_ELEMENTS = 4;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {
@@ -48,7 +48,7 @@ export class TestComponentComponent implements OnInit {
 	test_reverseNth() {
 		console.log("-- TESING REVERSENTH METHOD --")
 
-		let list = new List();
+		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {
@@ -67,7 +67,7 @@ export class TestComponentComponent implements OnInit {
 
 	test_reverse() {
 		console.log("-- TESING REVERSE METHOD --")
-		let list = new List();
+		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {
@@ -86,7 +86,7 @@ export class TestComponentComponent implements OnInit {
 
 	test_insertFront() {
 		console.log("-- TESING INSERT_FRONT METHOD --")
-		let list = new List();
+		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {
@@ -99,7 +99,7 @@ export class TestComponentComponent implements OnInit {
 
 	test_insertBack() {
 		console.log("-- TESING INSERT_BACK METHOD --")
-		let list = new List();
+		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
 		for (var i = 0; i < NUM_ELEMENTS; i++) {

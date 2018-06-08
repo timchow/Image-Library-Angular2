@@ -1,4 +1,4 @@
-import { GraphVertex } from '../../models/graph-vertex';
+import { GraphVertex } from '../graph-vertex';
 import { IGraph } from '../../interfaces/i-graph';
 import TreeUtility from '../../utility/tree-utility';
 

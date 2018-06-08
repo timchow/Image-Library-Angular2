@@ -1,4 +1,4 @@
-import { GraphVertex } from '../models/graph-vertex';
+import { GraphVertex } from '../data-structures/graph-vertex';
 
 export interface IGraph {
     //isAdjacent(v1: GraphVertex,v2: GraphVertex): boolean;

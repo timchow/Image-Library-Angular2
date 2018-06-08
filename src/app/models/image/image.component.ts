@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Photo } from './image';
-import { Quadtree } from '../quadtree/quadtree';
+import { Quadtree } from '../../data-structures/quadtree/quadtree';
 import * as $ from 'jquery';
 
 @Component({

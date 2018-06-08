@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { List } from './list'
+import { LinkedList } from './linked-list'
 
 @Component({
     selector: 'app-linked-list',
@@ -8,10 +8,10 @@ import { List } from './list'
 })
 export class LinkedListComponent implements OnInit {
 
-    public linkedList: List;
+    public linkedList: LinkedList;
 
     constructor() {
-        this.linkedList = new List();
+        this.linkedList = new LinkedList();
     }
 
     ngOnInit() {

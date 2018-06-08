@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuadtreeComponent } from './quadtree.component';
-import { Photo } from '../image/image';
+import { Photo } from '../../models/image/image';
 
 describe('QuadtreeComponent', () => {
     let component: QuadtreeComponent;

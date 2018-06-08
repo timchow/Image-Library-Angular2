@@ -2,15 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { TestComponentComponent } from './models/test-component/test-component.component';
-import { LinkedListComponent } from './models/linked-list/linked-list.component';
-import { StackComponent } from './models/stack/stack.component';
+import { TestComponentComponent } from './abstract-data-types/test-component/test-component.component';
+import { LinkedListComponent } from './data-structures/linked-list/linked-list.component';
+import { StackComponent } from './abstract-data-types/stack/stack.component';
 import { ImageComponent } from './models/image/image.component';
-import { QueueComponent } from './models/queue/queue.component';
-import { QuadtreeComponent } from './models/quadtree/quadtree.component';
+import { QueueComponent } from './abstract-data-types/queue/queue.component';
+import { QuadtreeComponent } from './data-structures/quadtree/quadtree.component';
 import { BinarySearchTreeComponent } from './data-structures/binary-search-tree/binary-search-tree.component';
 import { HeapComponent } from './data-structures/heap/heap.component';
-import { PriorityQueueComponent } from './models/priority-queue/priority-queue.component';
+import { PriorityQueueComponent } from './abstract-data-types/priority-queue/priority-queue.component';
 
 @NgModule({
     declarations: [

@@ -1,5 +1,5 @@
-import { RgbaPixel } from '../image/rgba-pixel';
-import { SvgElement } from '../image/svg-element';
+import { RgbaPixel } from '../../models/image/rgba-pixel';
+import { SvgElement } from '../../models/image/svg-element';
 
 export class QuadtreeNode<T> {
 
@@ -22,10 +22,10 @@ export class QuadtreeNode<T> {
 	}
 
     constructor(_data: T = null) {
-        this.nwChild = null;//new QuadtreeNode<T>();
-        this.neChild = null;//new QuadtreeNode<T>();
-        this.swChild = null;//new QuadtreeNode<T>();
-        this.seChild = null;//new QuadtreeNode<T>();
+        this.nwChild = null;
+        this.neChild = null;
+        this.swChild = null;
+        this.seChild = null;
 
         this.data = _data;
 		this.isActive = true;

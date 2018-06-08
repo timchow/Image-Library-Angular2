@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TestComponentComponent } from './models/test-component/test-component.component';
+import { TestComponentComponent } from './abstract-data-types/test-component/test-component.component';
 import { ImageComponent } from './models/image/image.component';
-import { GraphVertex } from './models/graph-vertex';
+import { GraphVertex } from './data-structures/graph-vertex';
 import { BinarySearchTree } from './data-structures/binary-search-tree/binary-search-tree';
 import { Heap } from './data-structures/heap/heap';
-import { Quadtree } from './models/quadtree/quadtree';
+import { Quadtree } from './data-structures/quadtree/quadtree';
 import TreeUtility from './utility/tree-utility';
 
 @Component({

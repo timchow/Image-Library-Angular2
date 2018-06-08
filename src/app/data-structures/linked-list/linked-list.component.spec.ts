@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LinkedListComponent } from './linked-list.component'
-import { List } from './list'
+import { LinkedList } from './linked-list'
 import ListUtility from './list-utility'
 
 describe('LinkedListComponent', () => {
@@ -177,7 +177,7 @@ describe('LinkedListComponent', () => {
         component.linkedList.insertBack(4);
         component.linkedList.insertBack(6);
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
         list2.insertBack(2);
         list2.insertBack(5);
         list2.insertBack(7);
@@ -200,7 +200,7 @@ describe('LinkedListComponent', () => {
         component.linkedList.insertBack(9);
         component.linkedList.insertBack(11);
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
         list2.insertBack(2);
         list2.insertBack(2);
         list2.insertBack(3);
@@ -226,7 +226,7 @@ describe('LinkedListComponent', () => {
         component.linkedList.insertBack(4);
         component.linkedList.insertBack(6);
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
 
         component.linkedList.merge(list2.getHead());
     
@@ -240,7 +240,7 @@ describe('LinkedListComponent', () => {
         let NUM_ELEMENTS = 10;
         
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
         list2.insertBack(2);
         list2.insertBack(2);
         list2.insertBack(3);
@@ -261,7 +261,7 @@ describe('LinkedListComponent', () => {
         let NUM_ELEMENTS = 10;
         
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
 
         component.linkedList.merge(list2.getHead());
     
@@ -275,7 +275,7 @@ describe('LinkedListComponent', () => {
         let NUM_ELEMENTS = 10;
         
 
-        let list2: List = new List();
+        let list2: LinkedList = new LinkedList();
         list2.insertBack(1);
 
         component.linkedList.insertBack(4);

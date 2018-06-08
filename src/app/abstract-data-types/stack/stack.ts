@@ -1,14 +1,14 @@
-import { List } from '../linked-list/list';
-import { ListNode } from '../linked-list/list-node';
-import { IBagStructure } from '../i-bag-structure';
+import { LinkedList } from '../../data-structures/linked-list/linked-list';
+import { ListNode } from '../../data-structures/linked-list/list-node';
+import { IBagStructure } from '../../interfaces/i-bag-structure';
 
 export class Stack implements IBagStructure<Stack> {
 
-    private stack: List;
+    private stack: LinkedList;
 
     constructor(otherStack: Stack = null) {
         if (otherStack == null) {
-            this.stack = new List();
+            this.stack = new LinkedList();
         }
         else {
             this.stack = null;

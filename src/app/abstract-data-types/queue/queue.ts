@@ -1,12 +1,12 @@
-import { List } from '../linked-list/list';
-import { ListNode } from '../linked-list/list-node';
-import { IBagStructure } from '../i-bag-structure';
+import { LinkedList } from '../../data-structures/linked-list/linked-list';
+import { ListNode } from '../../data-structures/linked-list/list-node';
+import { IBagStructure } from '../../interfaces/i-bag-structure';
 
 export class Queue implements IBagStructure<Queue> {
-    private queue: List;
+    private queue: LinkedList;
 
     constructor() {
-        this.queue = new List();
+        this.queue = new LinkedList();
     }
 
     public enqueue(data: any): void {

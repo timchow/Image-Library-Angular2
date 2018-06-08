@@ -1,4 +1,4 @@
-import { List } from './list';
+import { LinkedList } from './linked-list';
 import { ListNode } from './list-node';
 
 export default class ListUtility {

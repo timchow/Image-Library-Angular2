@@ -1,4 +1,4 @@
-import { SvgElement } from './image/svg-element';
+import { SvgElement } from '../models/image/svg-element';
 
 export class GraphVertex {
     public data: any;

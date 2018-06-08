@@ -1,4 +1,4 @@
-import { GraphVertex } from '../models/graph-vertex';
+import { GraphVertex } from '../data-structures/graph-vertex';
 import { IGraph } from '../interfaces/i-graph';
 import { SvgElement } from '../models/image/svg-element';
 
