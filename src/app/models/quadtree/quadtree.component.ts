@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Quadtree } from './quadtree';
+import { Photo } from '../image/image';
 @Component({
     selector: 'app-quadtree',
     templateUrl: './quadtree.component.html',

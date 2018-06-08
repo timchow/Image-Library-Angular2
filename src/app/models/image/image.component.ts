@@ -15,22 +15,25 @@ export class ImageComponent implements OnInit {
     private quadtree: Quadtree;
 
     constructor() {
-        this.image = new Photo("/assets/Polaroid3.jpg");
+        //this.image = new Photo("/assets/in.bmp");
         //this.image = new Photo("/assets/in_1.jpg");
         //this.image2 = new Photo("/assets/Polaroid2.jpg");
-        //this.image = new Photo("/assets/in_2.jpg");
+        this.image = new Photo("assets/in3.png");
         let canvas = document.createElement('canvas');
-        let canvas2 = document.createElement('canvas');
-        $(canvas).addClass("can")
-        this.quadtree = new Quadtree();
+		this.quadtree = new Quadtree();
+		
         this.image.initialize.then(() => {
             let appImage = document.getElementsByTagName("app-image");
-            this.quadtree.buildTree(this.image, this.image.height);
-            //this.quadtree.prune(100);
-            this.quadtree.prettyPrint();
-            //
-            //this.image = this.quadtree.decompress();
-            //appImage[0].appendChild(this.image.ctx.canvas);
+			this.quadtree.buildTree(this.image, this.image.height);
+
+			// before
+			this.image = this.quadtree.decompress();
+			appImage[0].appendChild(this.image.ctx.canvas);
+			
+			// after
+			this.quadtree.prune(35000);
+			let newImage = this.quadtree.decompress();
+			appImage[0].appendChild(newImage.ctx.canvas);
         });
 
         /*

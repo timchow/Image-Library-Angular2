@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
 	title = ""; //'app';
 	
     ngOnInit() {
-
+		/*
 		let tree = new Heap(1);
 		tree.RandomPopulate();
 
@@ -30,6 +30,6 @@ export class AppComponent implements OnInit {
         this.levels = obj.levels;
         svg.setAttribute("width", obj.width);
         svg.setAttribute("height", obj.height);
-        svg.setAttribute("style", "padding-top:50px");
+        svg.setAttribute("style", "padding-top:50px");*/
     }
 }

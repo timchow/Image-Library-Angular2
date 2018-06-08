@@ -27,9 +27,9 @@ describe('QuadtreeComponent', () => {
     it('should create a quadtree representing an image', () => {
         
         // need d by d photo, where d = 2^k and k in integers
-        /*let photo = new Photo("/base/src/assets/Polaroid2.jpg");
+        /*let photo = new Photo(`C:\Users\tchow\Pictures\in.bmp`);
         photo.initialize.then(()=>{
-            //debugger;
+            debugger;
             component.quadtree.buildTree(photo,photo.getHeight());
 
 

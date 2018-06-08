@@ -15,7 +15,11 @@ export class QuadtreeNode<T> {
     public min_children_y: number;
     public max_children_y: number;
     public svgElement: SvgElement;
-    public isActive: boolean;
+	public isActive: boolean;
+	public isPrunedRoot: boolean;
+	public get isLeaf(): boolean {
+		return !this.neChild && !this.nwChild && !this.swChild && !this.seChild;
+	}
 
     constructor(_data: T = null) {
         this.nwChild = null;//new QuadtreeNode<T>();
@@ -24,7 +28,8 @@ export class QuadtreeNode<T> {
         this.seChild = null;//new QuadtreeNode<T>();
 
         this.data = _data;
-        this.isActive = true;
+		this.isActive = true;
+		this.isPrunedRoot = false;
         this.createElement("circle");
     }
 
@@ -37,5 +42,5 @@ export class QuadtreeNode<T> {
         }
         
         return this.svgElement;
-    }
+	}
 }
