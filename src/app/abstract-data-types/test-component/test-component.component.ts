@@ -31,7 +31,7 @@ export class TestComponentComponent implements OnInit {
 		let list = new LinkedList();
 		let NUM_ELEMENTS = 4;
 		
-		for (var i = 0; i < NUM_ELEMENTS; i++) {
+		for (let i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertBack(i);
 		}
 
@@ -51,7 +51,7 @@ export class TestComponentComponent implements OnInit {
 		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
-		for (var i = 0; i < NUM_ELEMENTS; i++) {
+		for (let i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertBack(i);
 		}
 
@@ -70,7 +70,7 @@ export class TestComponentComponent implements OnInit {
 		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
-		for (var i = 0; i < NUM_ELEMENTS; i++) {
+		for (let i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertFront(i);
 		}
 
@@ -89,7 +89,7 @@ export class TestComponentComponent implements OnInit {
 		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
-		for (var i = 0; i < NUM_ELEMENTS; i++) {
+		for (let i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertFront(i);
 		}
 
@@ -102,7 +102,7 @@ export class TestComponentComponent implements OnInit {
 		let list = new LinkedList();
 		let NUM_ELEMENTS = 10;
 		
-		for (var i = 0; i < NUM_ELEMENTS; i++) {
+		for (let i = 0; i < NUM_ELEMENTS; i++) {
 			list.insertBack(i);
 		}
 
@@ -122,41 +122,41 @@ export class TestComponentComponent implements OnInit {
 
 	test() {
 		/*
-		var img = <HTMLCanvasElement>document.getElementById("testImage");
-		var out = document.getElementById("out");
-		var in_canvas = <HTMLCanvasElement>document.createElement('canvas');
+		let img = <HTMLCanvasElement>document.getElementById("testImage");
+		let out = document.getElementById("out");
+		let in_canvas = <HTMLCanvasElement>document.createElement('canvas');
 		in_canvas.width = img.width;
 		in_canvas.height = img.height;
-		var ctx = <CanvasRenderingContext2D>in_canvas.getContext('2d');
+		let ctx = <CanvasRenderingContext2D>in_canvas.getContext('2d');
 		ctx.drawImage(img, 0,0, img.width, img.height);
-		var imageData = ctx.getImageData(0,0,in_canvas.width, in_canvas.height);
+		let imageData = ctx.getImageData(0,0,in_canvas.width, in_canvas.height);
 
 		// convert imageData to 2d rgbapixel 
 		this.image = new Photo("");
 
-		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
+		let out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
-		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
+		let out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
 		this.image.drawOnCanvas(out_ctx);
-		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
+		let out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
-		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
+		let out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
 		this.image.draw(out_ctx);*/
 	}
 
 	rotate() {
 		/*
-		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
+		let out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
-		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
+		let out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
 		this.image.draw(out_ctx);
-		var out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
+		let out_canvas = <HTMLCanvasElement>document.getElementById('canvas');
 		out_canvas.width = this.image.getWidth();
 		out_canvas.height = this.image.getHeight();
-		var out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
+		let out_ctx = <CanvasRenderingContext2D>out_canvas.getContext('2d');
 		this.image.rotate180();
 		this.image.draw(out_ctx);*/
 	}

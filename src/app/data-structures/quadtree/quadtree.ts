@@ -34,7 +34,7 @@ export class Quadtree {
 
     private _buildTree(root: QuadtreeNode<RgbaPixel> , image: Photo, offset: number, res: number, x: number, y: number): QuadtreeNode<RgbaPixel> {
         if (res == 1) {
-            root = new QuadtreeNode<RgbaPixel>(image.getPixel(x - 1, y - 1));
+            root = new QuadtreeNode<RgbaPixel>(image.GetPixel(x - 1, y - 1));
             root.mapped_x = x - 1;
             root.mapped_y = y - 1;
             root.min_children_x = x - 1;
@@ -118,7 +118,7 @@ export class Quadtree {
     private _decompress(): Photo {
         let photo = new Photo();
 
-        for (var x = 0; x < this.resolution; x++) {
+        for (let x = 0; x < this.resolution; x++) {
             photo.pixels[x] = [];
 		}
 		

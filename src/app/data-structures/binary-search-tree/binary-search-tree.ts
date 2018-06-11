@@ -20,6 +20,10 @@ export class BinarySearchTree implements IGraph {
         return null;
     }
 
+	/**
+	 * 
+	 * @param data 
+	 */
     public addVertex(data: any): void {
         if (this.keyExists(Math.floor(data))) return; // Enforcing unique keys
 
@@ -121,7 +125,6 @@ export class BinarySearchTree implements IGraph {
                 return root;
             }
         }
-
 
         let result = null;
         root.neighbors.forEach(neighbor => {

@@ -19,7 +19,7 @@ export class ImageComponent implements OnInit {
         //this.image = new Photo("/assets/in_1.jpg");
         //this.image2 = new Photo("/assets/Polaroid2.jpg");
         this.image = new Photo("assets/in3.png");
-        let canvas = document.createElement('canvas');
+        /*let canvas = document.createElement('canvas');
 		this.quadtree = new Quadtree();
 		
         this.image.initialize.then(() => {
@@ -34,15 +34,21 @@ export class ImageComponent implements OnInit {
 			this.quadtree.prune(35000);
 			let newImage = this.quadtree.decompress();
 			appImage[0].appendChild(newImage.ctx.canvas);
-        });
+		});*/
+		
+		
+		this.image.initialize.then(() => {
+			let canvas = <HTMLCanvasElement>document.getElementById("canvas");
+			this.image.DrawOnCanvas(canvas);
+			canvas.addEventListener('click', (evt) => {
+				let mousePos = this.image.GetMousePosition(canvas, evt);
+				console.log('Mouse position: ' + mousePos.x + ',' + mousePos.y);
 
-        /*
-        canvas.addEventListener('click', (evt) => {
-            var mousePos = this.image.getMousePos(canvas, evt);
-            console.log('Mouse position: ' + mousePos.x + ',' + mousePos.y);
+				this.image.FloodFill(50,Math.floor(mousePos.x),Math.floor(mousePos.y));
+			}, false);
+		});
 
-            this.image.floodFill(Math.floor(mousePos.x),Math.floor(mousePos.y));
-        }, false);*/
+        
     }
 
     ngOnInit() {
