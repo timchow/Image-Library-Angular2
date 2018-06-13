@@ -21,15 +21,12 @@ export class HeapComponent implements OnInit {
         this.heap.insert(10);
         this.heap.insert(50);
         this.heap.insert(43);
-        this.heap.insert(2);
+		this.heap.insert(2);
 
+		console.log(this.heap.getHeapArray());
+		this.heap.heapSort();
         console.log(this.heap.getHeapArray());
-        console.log(this.heap.getHeapTree());
-
-		//TreeUtility.prettyPrint(this.heap.getHeapTree());
-        //this.heap.heapSort();
-        //console.log(this.heap.getHeapArray());
-        //console.log(this.heap.getHeapTree())
+		console.log(this.heap.getHeapTree());
     }
 
     ngOnInit() {

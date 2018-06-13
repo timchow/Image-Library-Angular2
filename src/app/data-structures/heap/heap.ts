@@ -29,12 +29,20 @@ export class Heap {
     }
 
     private _insert(heap: GraphVertex[], data: any) {
-        this.heapArray.push(new GraphVertex(data, this.numNeighbors));
-        this.root = this.buildHeap(this.root, this.heapArray);
+		let newEntry = new GraphVertex(data, this.numNeighbors);
+		this.heapArray.push(newEntry);
+
+		if (this.heapArray.length < 3) return;
+
+		let child = (this.heapArray.length-1)/2 % 1; // left is 0, right is .5
+		let parentIdx = (Math.floor((this.heapArray.length-1)/2));
+		this._heapifyUp(this.heapArray.length-1);
+		this.root = this.heapArray[1];
     }
 
     private buildHeap(root: GraphVertex, heap: GraphVertex[]) {
         if (heap.length > 2) {
+			// Math.ceil(heap.length / 2) - 1, represents all the non leaves
             for (let j = Math.ceil(heap.length / 2) - 1; j > 0; j--) {
                 let current = heap[j];
 
@@ -47,8 +55,6 @@ export class Heap {
                     let rightChild = heap[(j * 2) + 1];
                     heap[j].neighbors[1] = rightChild;
                 }
-
-                this.heapify(heap[j]);
             }
         }
 		root = heap[1];
@@ -62,15 +68,64 @@ export class Heap {
 			
             if (this.type == HeapType.MIN) {
                 if (root.data > neighbor.data) {
-                    this.swapData(root, neighbor);
+					this.swapData(root, neighbor);
                 }
             } else if (this.type == HeapType.MAX) {
                 if (root.data < neighbor.data) {
-                    this.swapData(root, neighbor);
+					this.swapData(root, neighbor);
                 }
             }
         }
-    }
+	}
+	
+	// Purpose of this function is to correct all violations starting from idx
+	private _heapifyDown(idx: number) {
+		// if we have reached a leaf
+		if ((this.heapArray.length-1)/2 < idx) return;
+
+		let leftChildIdx = idx*2;
+		let rightChildIdx = (idx*2)+1;
+
+		if (this.type == HeapType.MIN) {
+			let smallerChildKeyIdx = leftChildIdx;
+
+			if (leftChildIdx < this.heapArray.length && rightChildIdx < this.heapArray.length) {
+				smallerChildKeyIdx = this.heapArray[leftChildIdx].data > this.heapArray[rightChildIdx].data ? rightChildIdx : leftChildIdx;
+			}
+			
+			if (this.heapArray[idx].data > this.heapArray[smallerChildKeyIdx].data) {
+				this.swapData(this.heapArray[idx], this.heapArray[smallerChildKeyIdx]);
+				this._heapifyDown(smallerChildKeyIdx);
+			}
+		}
+
+		if (this.type == HeapType.MAX) {
+			let largerChildKeyIdx = leftChildIdx;
+
+			if (leftChildIdx < this.heapArray.length && rightChildIdx < this.heapArray.length) {
+				largerChildKeyIdx = this.heapArray[leftChildIdx].data > this.heapArray[rightChildIdx].data ? leftChildIdx : rightChildIdx;
+			}
+
+			if (this.heapArray[idx].data < this.heapArray[largerChildKeyIdx].data) {
+				this.swapData(this.heapArray[idx], this.heapArray[largerChildKeyIdx]);
+				this._heapifyDown(largerChildKeyIdx);
+			}
+		}
+	}
+
+	private _heapifyUp(idx: number) {
+		let parentIdx = (Math.floor(idx/2));
+
+		// swap with parent if needed
+		if (this.type == HeapType.MIN && this.heapArray[idx].data < this.heapArray[parentIdx].data) {
+			this.swapData(this.heapArray[idx],this.heapArray[parentIdx]);
+			this._heapifyUp(parentIdx);
+		}
+		else if (this.type == HeapType.MAX && this.heapArray[idx].data > this.heapArray[parentIdx].data) {
+			this.swapData(this.heapArray[idx],this.heapArray[parentIdx]);
+			this._heapifyUp(parentIdx);
+		}
+	}
 
     private swapData(a: GraphVertex, b: GraphVertex) {
         let temp: GraphVertex = null;
@@ -103,20 +158,13 @@ export class Heap {
 
         // Case: More than 1 element
         else {
-            let lastElement = heapArray[heapArray.length - 1];
+			let lastElement = heapArray[heapArray.length - 1];
             this.swapData(root, lastElement);
+            let extractedRoot = heapArray.pop();
+			this._heapifyDown(1);
 
-            let rootElement = heapArray.pop();
-
-            for (let i = 1; i < Math.floor(heapArray.length / 2); i++) {
-                let current = heapArray[i];
-
-                this.heapify(current);
-            }
-
-            return rootElement;
+            return extractedRoot;
         }
-
 	}
 	
 	public RandomPopulate() {

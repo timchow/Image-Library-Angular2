@@ -42,7 +42,6 @@ export class BinarySearchTree implements IGraph {
         let nodeToRemove = this.findVertex(key);
         let parent = this.findParentOfGivenKey(this.root, nodeToRemove.data);
 
-
         if (nodeToRemove) {
             // no children
             if (nodeToRemove.data == this.root.data) {
